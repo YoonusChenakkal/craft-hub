@@ -1,0 +1,71 @@
+import 'package:dio/dio.dart';
+
+class CartRepository {
+  final Dio dio = Dio();
+
+  Future fetchCart(userId) async {
+    // Fetch cart
+
+    try {
+      Response response = await dio.get(
+        'https://purpleecommerce.pythonanywhere.com/productsapp/cart/$userId/',
+      );
+
+      // Success case
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(response.data);
+        return response;
+      } else {
+        // This block is not needed if using default validateStatus
+        throw Exception('Unexpected status code: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      // Handle 400 errors and other Dio exceptions
+      if (e.response != null) {
+        String errorMessage = '';
+        errorMessage = e.response!.data.entries.first.value;
+        print('---------------->${errorMessage}');
+
+        throw Exception(
+            errorMessage.isNotEmpty ? errorMessage : 'fetch Cart failed');
+      } else {
+        throw Exception('Network error: ${e.message}');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  Future deleteCartItem(cartItemId) async {
+    // Fetch cart
+
+    try {
+      Response response = await dio.delete(
+        'https://purpleecommerce.pythonanywhere.com/productsapp/cart/delete/$cartItemId/',
+      );
+
+      // Success case
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(response.data);
+        return response;
+      } else {
+        // This block is not needed if using default validateStatus
+        throw Exception('Unexpected status code: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      // Handle 400 errors and other Dio exceptions
+      if (e.response != null) {
+        String errorMessage = '';
+        errorMessage = e.response!.data.entries.first.value;
+        print('---------------->${errorMessage}');
+
+        throw Exception(
+            errorMessage.isNotEmpty ? errorMessage : 'delete Cart failed');
+      } else {
+        throw Exception('Network error: ${e.message}');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+}
