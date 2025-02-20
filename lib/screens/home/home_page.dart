@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crafti_hub/common/custom_app_bar.dart';
 import 'package:crafti_hub/screens/home/home_provider.dart';
 import 'package:crafti_hub/screens/products/product_card.dart';
@@ -18,6 +19,8 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+
+    // homeProvider.fetchPromoBanners(context);
 
     homeProvider.fetchOfferProducts(context);
     homeProvider.fetchPopularProducts(context);
@@ -71,31 +74,29 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-   SliverToBoxAdapter _buildPromoBanner(StoreProvider storeProvider) {
-    return SliverToBoxAdapter(
-      child: CarouselSlider.builder(
-        itemCount: storeProvider.carousel.length,
-        itemBuilder: (context, index, realIndex) {
-          return Container(
-            margin: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              image: DecorationImage(
-                image: NetworkImage(storeProvider.carousel[index].imageUrl),
-                fit: BoxFit.cover,
-              ),
+
+  _buildPromoBanner(HomeProvider homeProvider) {
+    return CarouselSlider.builder(
+      itemCount: homeProvider.promoBanners.length,
+      itemBuilder: (context, index, realIndex) {
+        return Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            image: DecorationImage(
+              image: NetworkImage(homeProvider.promoBanners[index].bannerImage),
+              fit: BoxFit.cover,
             ),
-          );
-        },
-        options: CarouselOptions(
-          height: 160, // Adjust height as needed
-          autoPlay: true, // Enables auto-scrolling
-          autoPlayInterval: Duration(seconds: 3), // Set autoplay speed
-          enlargeCenterPage: true, // Makes the current item bigger
-          viewportFraction:
-              0.9, // Adjusts how much of the next image is visible
-          onPageChanged: (index, reason) {},
-        ),
+          ),
+        );
+      },
+      options: CarouselOptions(
+        height: 160, // Adjust height as needed
+        autoPlay: true, // Enables auto-scrolling
+        autoPlayInterval: Duration(seconds: 3), // Set autoplay speed
+        enlargeCenterPage: true, // Makes the current item bigger
+        viewportFraction: 0.9, // Adjusts how much of the next image is visible
+        onPageChanged: (index, reason) {},
       ),
     );
   }

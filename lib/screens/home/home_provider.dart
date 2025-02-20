@@ -1,5 +1,6 @@
 import 'package:crafti_hub/common/flush_bar.dart';
 import 'package:crafti_hub/screens/home/home_respository.dart';
+import 'package:crafti_hub/screens/home/product_banner_model.dart';
 import 'package:crafti_hub/screens/products/product_model.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,7 @@ class HomeProvider extends ChangeNotifier {
   List<ProductModel> popularProducts = [];
   List<ProductModel> offerProducts = [];
   List<ProductModel> allProducts = [];
+  List<ProductBannerModel> promoBanners = [];
   String _searchQuery = '';
 
   bool get isLoading => _isLoading;
@@ -106,6 +108,35 @@ class HomeProvider extends ChangeNotifier {
         message: 'Fetching All Products Failed',
       );
       print("❌ Fetching All Products failed: $e");
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  //---------------- fetch Promo  Banners  ------->
+
+  fetchPromoBanners(BuildContext context) async {
+    isLoading = true;
+
+    try {
+      final response = await _homeRepo.fetchPromoBanners();
+
+      promoBanners = (response.data as List)
+          .map((item) => ProductBannerModel.fromJson(item))
+          .toList();
+
+      print('Sucess Fetch Promo Banners Fetch');
+
+      notifyListeners();
+    } on Exception catch (e) {
+      // Display the parsed error message
+      showFlushbar(
+        context: context,
+        color: Colors.red,
+        icon: Icons.error,
+        message: 'Fetching Promo Banners  Failed',
+      );
+      print("❌ Fetching Promo Banners failed: $e");
     } finally {
       isLoading = false;
     }

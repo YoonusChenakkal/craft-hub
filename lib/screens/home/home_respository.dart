@@ -102,4 +102,37 @@ class HomeRespository {
       throw Exception('Unexpected error: $e');
     }
   }
+
+  //---------------- fetch Promo Banners ------->
+
+  Future fetchPromoBanners() async {
+    try {
+      Response response = await dio.get(
+        'https://purpleecommerce.pythonanywhere.com/productsapp/product/banner/image/list/',
+      );
+
+      // Success case
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response;
+      } else {
+        // This block is not needed if using default validateStatus
+        throw Exception('Unexpected status code: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      // Handle 400 errors and other Dio exceptions
+      if (e.response != null) {
+        String errorMessage = '';
+        errorMessage = e.response!.data.entries.first.value;
+        print('---------------->${errorMessage}');
+
+        throw Exception(errorMessage.isNotEmpty
+            ? errorMessage
+            : 'fetch Promo Banners failed');
+      } else {
+        throw Exception('Network error: ${e.message}');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
 }
