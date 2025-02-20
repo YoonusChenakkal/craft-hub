@@ -20,25 +20,27 @@ class CartProvider extends ChangeNotifier {
 
   Future<void> fetchCart() async {
     try {
-      // final userId = await LocalStorage.getUser();
       final userId = 7;
 
       // Fetch the cart data from the repository
       final response = await _cartRepository.fetchCart(userId);
-      // Extract the cart items from the response
-      final cartItemsJson = response.data['cart_items'];
-      totalPrice = response.data['total_price'];
 
-      // Map the JSON data to CartItem instances
-      cartItems = cartItemsJson.map((json) => CartItem.fromJson(json)).toList();
+      print('cart_items  ----------->${response.data['cart_items']}');
+      print('total_price  ----------->${response.data['total_price']}');
 
-      // Notify listeners to update the UI
+      // Extract cart items safely
+      cartItems = (response.data['cart_items'] as List)
+          .map((json) => CartItem.fromJson(json))
+          .toList();
+
+      // Extract total price safely
+      totalPrice = (response.data['total_price'] as num).toDouble();
+
       notifyListeners();
     } catch (e) {
       if (kDebugMode) {
         print('Fetch cart error: $e');
       }
-      // Optionally, you can rethrow the error or handle it differently
       rethrow;
     }
   }
