@@ -1,20 +1,19 @@
-import 'package:crafti_hub/user%20side/common/product_details_page.dart';
-import 'package:crafti_hub/user%20side/screens/category/categories_page.dart';
-import 'package:crafti_hub/user%20side/screens/home/home_page.dart';
-import 'package:crafti_hub/user%20side/screens/profile/profile_page.dart';
+import 'package:crafti_hub/Vandor%20side/screens/home/home_page.dart';
+import 'package:crafti_hub/Vandor%20side/screens/products/products_page.dart';
+import 'package:crafti_hub/Vandor%20side/screens/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 
-class BottomBar extends StatefulWidget {
-  const BottomBar({super.key});
+class VendorBottomBar extends StatefulWidget {
+  const VendorBottomBar({super.key});
 
   @override
   _BottomBarState createState() => _BottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar> {
+class _BottomBarState extends State<VendorBottomBar> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = [HomePage(), CategoriesPage(), ProfilePage()];
+  final List<Widget> _screens = [VendorHomePage(), VendorProductsPage(), VendorProfilePage()];
 
   void _onItemTapped(int index) {
     setState(() {

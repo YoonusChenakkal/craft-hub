@@ -16,7 +16,7 @@ class PersonalInfoSetcion extends StatelessWidget {
     return CustomExpansionTile(
         leading: const Icon(
           Icons.person,
-          color: Colors.brown,
+          color: Color.fromARGB(255, 0, 156, 177),
         ),
         title: 'Personal Info',
         children: [

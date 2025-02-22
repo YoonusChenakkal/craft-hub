@@ -94,7 +94,7 @@ class RegisterPage extends StatelessWidget {
                 }
               },
               buttonName: 'Register',
-              color: Colors.brown,
+              color: Colors.cyan,
             ),
             space,
             Row(
@@ -108,7 +108,7 @@ class RegisterPage extends StatelessWidget {
                   },
                   child: Text(
                     'Login',
-                    style: TextStyle(color: Colors.brown),
+                    style: TextStyle(color: Colors.cyan),
                   ),
                 ),
               ],

@@ -1,18 +1,28 @@
-import 'package:crafti_hub/user%20side/const/urls.dart';
+import 'package:crafti_hub/Vandor%20side/const/urls.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 
 class AuthRepository {
   final Dio dio = Dio();
 
   // -------- Register APi --------->
 
-  Future userRegister(Map<String, dynamic> data) async {
+  Future registerVendor(Map<String, dynamic> data) async {
     try {
-      FormData formData = FormData.fromMap(data);
+      MultipartFile? imageFile;
+      if (data["display_image"] != null) {
+        imageFile = await MultipartFile.fromFile(data["display_image"].path);
+      }
+
+      FormData formData = FormData.fromMap({
+        "name": data["name"],
+        "contact_number": data["contact_number"],
+        "whatsapp_number": data["whatsapp_number"],
+        "email": data["email"],
+        if (imageFile != null) "display_image": imageFile,
+      });
 
       Response response = await dio.post(
-        '${baseUrl}register/',
+        '${baseUrl}vendors/',
         data: formData,
       );
 
@@ -27,51 +37,7 @@ class AuthRepository {
       // Handle 400 errors and other Dio exceptions
       if (e.response != null) {
         String errorMessage = '';
-        final responseData = e.response!.data;
-        if (responseData is Map<String, dynamic> && responseData.isNotEmpty) {
-          errorMessage =
-              responseData.values.first.toString(); // Get first value
-        }
-        print('---------------->${errorMessage}');
-
-        throw Exception(errorMessage.isNotEmpty
-            ? errorMessage
-            : 'Registration Failed failed');
-      } else {
-        throw Exception('Network error: ${e.message}');
-      }
-    } catch (e) {
-      throw Exception('Unexpected error: $e');
-    }
-  }
-
-  // -------- verify Register Otp APi --------->
-
-  Future verifyRegisterOtp(Map<String, dynamic> data) async {
-    try {
-      FormData formData = FormData.fromMap(data);
-
-      Response response = await dio.post(
-        '${baseUrl}verify-otp/',
-        data: formData,
-      );
-
-      // Success case
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return response;
-      } else {
-        // This block is not needed if using default validateStatus
-        throw Exception('Unexpected status code: ${response.statusCode}');
-      }
-    } on DioException catch (e) {
-      // Handle 400 errors and other Dio exceptions
-      if (e.response != null) {
-        String errorMessage = '';
-        final responseData = e.response!.data;
-        if (responseData is Map<String, dynamic> && responseData.isNotEmpty) {
-          errorMessage =
-              responseData.values.first.toString(); // Get first value
-        }
+        errorMessage = e.response!.data.entries.first.value[0];
         print('---------------->${errorMessage}');
 
         throw Exception(errorMessage.isNotEmpty
@@ -86,37 +52,34 @@ class AuthRepository {
   }
   // -------- Login API ---------->
 
-  Future loginUser(Map<String, dynamic> data) async {
+  Future loginVendor(Map<String, dynamic> data) async {
     try {
       FormData formData = FormData.fromMap(data);
 
       Response response = await dio.post(
-        '${baseUrl}request-otp/',
+        '${baseUrl}vendor-login/',
         data: formData,
       );
-      debugPrint("Response: $response");
-
-      print(formData);
 
       // Success case
       if (response.statusCode == 200 || response.statusCode == 201) {
         print(response);
         return response;
+      } else {
+        // This block is not needed if using default validateStatus
+        throw Exception('Unexpected status code: ${response.statusCode}');
       }
     } on DioException catch (e) {
       // Handle 400 errors and other Dio exceptions
       if (e.response != null) {
         String errorMessage = '';
-        // Extract the first value from the response map
-        final responseData = e.response!.data;
-        if (responseData is Map<String, dynamic> && responseData.isNotEmpty) {
-          errorMessage =
-              responseData.values.first.toString(); // Get first value
-        }
+        errorMessage = e.response!.data.entries.first.value[0];
         print('---------------->${errorMessage}');
 
         throw Exception(
             errorMessage.isNotEmpty ? errorMessage : 'Sent otp failed');
+      } else {
+        throw Exception('Network error: ${e.message}');
       }
     } catch (e) {
       throw Exception('Unexpected error: $e');
@@ -130,7 +93,7 @@ class AuthRepository {
       FormData formData = FormData.fromMap(data);
 
       Response response = await dio.post(
-        '${baseUrl}login/',
+        '${baseUrl}vendor-otpverify/',
         data: formData,
       );
 

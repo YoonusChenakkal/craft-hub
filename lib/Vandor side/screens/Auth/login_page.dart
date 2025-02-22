@@ -1,20 +1,18 @@
-import 'package:crafti_hub/user%20side/common/crafti_hub_logo.dart';
-import 'package:crafti_hub/user%20side/screens/Auth/auth_provider.dart';
-import 'package:crafti_hub/user%20side/common/button.dart';
-import 'package:crafti_hub/user%20side/common/flush_bar.dart';
-import 'package:crafti_hub/user%20side/common/form_field_features.dart';
-import 'package:crafti_hub/user%20side/screens/profile/profile_provider.dart';
+import 'package:crafti_hub/Vandor%20side/common/button.dart';
+import 'package:crafti_hub/Vandor%20side/common/flush_bar.dart';
+import 'package:crafti_hub/Vandor%20side/common/form_field_features.dart';
+import 'package:crafti_hub/Vandor%20side/screens/Auth/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class VendorLoginPage extends StatelessWidget {
+  const VendorLoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
+    final authProvider = Provider.of<VendorAuthProvider>(context);
 
     return Scaffold(
       body: Padding(
@@ -22,17 +20,17 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            craftiHubLogo(),
+            logo(),
             SizedBox(
               height: 6.h,
             ),
             TextFormField(
-              enabled: !authProvider.showLoginOtpField,
+              enabled: !authProvider.showOtpField,
               controller: authProvider.tcLoginEmail,
               decoration: textFormFieldDecoration(
                   hinttext: 'Email', prefixIcon: Icons.email_outlined),
             ),
-            if (authProvider.showLoginOtpField) ...[
+            if (authProvider.showOtpField) ...[
               SizedBox(
                 height: 1.5.h,
               ),
@@ -56,14 +54,14 @@ class LoginPage extends StatelessWidget {
                   if (authProvider.tcLoginEmail.text.isEmpty) {
                     showFlushbar(
                       context: context,
-                      color: Colors.red,
+                      color: Colors.cyan,
                       icon: Icons.error,
                       message: 'Enter email',
                     );
-                  } else if (!authProvider.showLoginOtpField) {
+                  } else if (!authProvider.showOtpField) {
                     // If OTP field is not shown, proceed with email login
                     final data = {'email': authProvider.tcLoginEmail.text};
-                    authProvider.loginUser(data, context);
+                    authProvider.loginVendor(data, context);
                   } else {
                     // If OTP field is shown, verify OTP
                     if (authProvider.tcLoginOtp.text.isEmpty ||
@@ -97,7 +95,7 @@ class LoginPage extends StatelessWidget {
                 TextButton(
                     onPressed: () {
                       authProvider.resetLogin();
-                      Navigator.pushReplacementNamed(context, '/register');
+                      Navigator.pushReplacementNamed(context, '/vendorRegister');
                     },
                     child: Text(
                       'Register',
@@ -106,6 +104,20 @@ class LoginPage extends StatelessWidget {
               ],
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  logo() {
+    return CircleAvatar(
+      backgroundColor: Colors.cyan,
+      radius: 16.w,
+      child: FittedBox(
+        child: Text(
+          'CRAFTI-HUB',
+          style: TextStyle(
+              fontSize: 19, color: Colors.white, fontWeight: FontWeight.w900),
         ),
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:crafti_hub/user%20side/common/flush_bar.dart';
-import 'package:crafti_hub/user%20side/const/local_storage.dart';
+import 'package:crafti_hub/local_storage.dart';
 import 'package:crafti_hub/user%20side/screens/profile/profile_repository.dart';
 import 'package:crafti_hub/user%20side/screens/profile/user_model.dart';
 import 'package:flutter/material.dart';

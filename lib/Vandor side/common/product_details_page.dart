@@ -1,16 +1,15 @@
-import 'package:crafti_hub/user%20side/common/add_to_cart_sheet.dart';
-import 'package:crafti_hub/user%20side/common/custom_app_bar.dart';
-import 'package:crafti_hub/user%20side/screens/products/product_model.dart';
+import 'package:crafti_hub/Vandor%20side/common/button.dart';
+import 'package:crafti_hub/Vandor%20side/common/custom_app_bar.dart';
+import 'package:crafti_hub/Vandor%20side/screens/products/product_model.dart';
 import 'package:flutter/material.dart';
 
-class ProductDetailPage extends StatelessWidget {
-  const ProductDetailPage({super.key});
-
+class VendorProductDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments;
     ProductModel product = args as ProductModel;
 
+    final double originalPrice = (product.price);
     final double savings = product.price - product.offerPrice;
     final bool hasDiscount = product.offerPrice < product.price;
 
@@ -169,57 +168,17 @@ class ProductDetailPage extends StatelessWidget {
             ),
           ),
           // Add to Cart Bar
-          _buildAddToCartBar(context, product)
+          Padding(
+              padding: EdgeInsets.all(15),
+              child: customButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/vendorEditProduct',
+                        arguments: product);
+                  },
+                  buttonName: 'Edit Product',
+                  color: Colors.cyan))
         ],
       ),
-    );
-  }
-
-  Widget _buildAddToCartBar(BuildContext context, product) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade300,
-            blurRadius: 4,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () => _showAddToCartDialog(context, product),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.cyan,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text(
-                'ADD TO CART',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showAddToCartDialog(BuildContext context, product) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (_) => AddToCartSheet(product: product),
     );
   }
 }

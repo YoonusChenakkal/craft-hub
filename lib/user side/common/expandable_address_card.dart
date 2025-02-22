@@ -19,7 +19,7 @@ class SavedAddressSection extends StatelessWidget {
       initiallyExpanded: true,
       leading: const Icon(
         Icons.location_on,
-        color: Colors.brown,
+        color: Color.fromARGB(255, 0, 156, 177),
       ),
       title: 'Address',
       children: [
@@ -45,7 +45,7 @@ class SavedAddressSection extends StatelessWidget {
         if (userAddress == null || userAddress.isEmpty)
           customButton(
               isLoading: false,
-              color: Colors.brown,
+              color: Colors.cyan,
               buttonName: '+ Address',
               onPressed: () {
                 _showEditAddressDialog(context, profileProvider);

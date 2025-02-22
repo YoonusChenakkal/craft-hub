@@ -1,11 +1,12 @@
-import 'package:crafti_hub/user%20side/const/local_storage.dart';
-import 'package:crafti_hub/user%20side/screens/home/home_provider.dart';
-import 'package:crafti_hub/user%20side/screens/profile/profile_provider.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
+import 'package:crafti_hub/local_storage.dart';
+import 'package:crafti_hub/user%20side/screens/home/home_provider.dart';
+import 'package:crafti_hub/user%20side/screens/profile/profile_provider.dart';
+import 'package:crafti_hub/Vandor%20side/screens/profile/provider/profile_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -24,35 +25,36 @@ class _SplashScreenState extends State<SplashScreen>
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 2),
-    );
+    )..forward();
 
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
-
-    _controller.forward(); // Start the animation
 
     _initializeApp();
   }
 
-  void _initializeApp() async {
+  Future<void> _initializeApp() async {
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-
     homeProvider.fetchPromoBanners(context);
     homeProvider.fetchCarousel(context);
-
     homeProvider.fetchOfferProducts(context);
     homeProvider.fetchPopularProducts(context);
 
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+    final userType = await LocalStorage.getUserType();
     final userId = await LocalStorage.getUser();
-    Future.delayed(Duration(seconds: 2), () async {
-      if (userId != null) {
-        await profileProvider.fetchUser(context);
-        Navigator.pushReplacementNamed(context, '/bottomBar');
+
+    if (userId != null) {
+      if (userType == 'vendor') {
+        await Provider.of<VendorProfileProvider>(context, listen: false)
+            .fetchUser(context);
+        Navigator.pushReplacementNamed(context, '/vendorBottomBar');
       } else {
-        Navigator.pushReplacementNamed(context, '/login');
+        await Provider.of<ProfileProvider>(context, listen: false)
+            .fetchUser(context);
+        Navigator.pushReplacementNamed(context, '/bottomBar');
       }
-    });
+    } else {
+      Navigator.pushReplacementNamed(context, '/welcomePage');
+    }
   }
 
   @override
@@ -67,24 +69,15 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: Colors.white,
       body: FadeTransition(
         opacity: _animation,
-        child: SizedBox(
-          height: 100.h,
-          width: 100.w,
+        child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(
-                'assets/logo.jpg',
-                height: 20.h,
-                width: 20.h,
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
+              Image.asset('assets/logo.jpg', height: 20.h, width: 20.h),
+              SizedBox(height: 1.h),
               RichText(
                 text: TextSpan(
-                  text: 'Crafti  ',
+                  text: 'Crafti ',
                   style: GoogleFonts.cairoPlay(
                     fontSize: 26.sp,
                     fontWeight: FontWeight.w700,
@@ -96,7 +89,7 @@ class _SplashScreenState extends State<SplashScreen>
                       style: GoogleFonts.novaSquare(
                         fontSize: 26.sp,
                         fontWeight: FontWeight.w700,
-                        color: Colors.brown,
+                        color: Colors.cyan,
                       ),
                     ),
                   ],

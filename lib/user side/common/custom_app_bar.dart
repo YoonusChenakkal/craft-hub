@@ -12,14 +12,14 @@ customAppBar({required title, bool backLeading = true}) {
     toolbarHeight: 8.h,
     automaticallyImplyLeading: backLeading,
     foregroundColor: Colors.white,
-    backgroundColor: Colors.brown,
+    backgroundColor: Colors.cyan,
   );
 }
 
 homeAppBar({required String userName, required VoidCallback onPressed}) {
   return AppBar(
     automaticallyImplyLeading: false,
-    backgroundColor: Colors.brown,
+    backgroundColor: Colors.cyan,
     toolbarHeight: 9.h,
     title: Column(
       crossAxisAlignment: CrossAxisAlignment.start,

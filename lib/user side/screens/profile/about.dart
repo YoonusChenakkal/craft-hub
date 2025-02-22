@@ -1,3 +1,4 @@
+import 'package:crafti_hub/user%20side/common/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class About extends StatefulWidget {
@@ -11,20 +12,7 @@ class _AboutState extends State<About> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: const Text(
-            "About",
-            style: TextStyle(
-                fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back),
-            color: Colors.white,
-          ),
-          backgroundColor: const Color.fromARGB(255, 136, 84, 66)),
+      appBar: customAppBar(title: 'About'),
       body: const SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(

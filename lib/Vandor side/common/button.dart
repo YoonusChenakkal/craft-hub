@@ -37,19 +37,14 @@ customButton(
 customRoundButton({
   required VoidCallback onPressed,
   required Widget textWidget,
-  bool isLoading = false,
 }) {
   return ElevatedButton(
-      onPressed: isLoading ? null : onPressed,
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.cyan,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
       ),
-      child: isLoading
-          ? CircularProgressIndicator(
-              color: Colors.white,
-            )
-          : textWidget);
+      child: textWidget);
 }

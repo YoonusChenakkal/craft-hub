@@ -1,5 +1,5 @@
 import 'package:crafti_hub/user%20side/common/flush_bar.dart';
-import 'package:crafti_hub/user%20side/const/local_storage.dart';
+import 'package:crafti_hub/local_storage.dart';
 import 'package:crafti_hub/user%20side/screens/cart/cart_model.dart';
 import 'package:crafti_hub/user%20side/screens/cart/repository/cart_repository.dart';
 import 'package:flutter/foundation.dart';

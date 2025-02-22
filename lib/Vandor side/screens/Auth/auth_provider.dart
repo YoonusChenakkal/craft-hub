@@ -1,22 +1,29 @@
-import 'package:crafti_hub/user%20side/screens/Auth/Auth_repository.dart';
-import 'package:crafti_hub/user%20side/common/flush_bar.dart';
+import 'dart:io';
+import 'package:crafti_hub/Vandor%20side/common/flush_bar.dart';
+import 'package:crafti_hub/Vandor%20side/screens/profile/provider/profile_provider.dart';
 import 'package:crafti_hub/local_storage.dart';
-import 'package:crafti_hub/user%20side/screens/profile/profile_provider.dart';
+import 'package:path/path.dart';
+import 'package:crafti_hub/Vandor%20side/screens/Auth/Auth_repository.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AuthProvider extends ChangeNotifier {
-  bool showLoginOtpField = false;
-  bool showRegisterOtpField = false;
-
+class VendorAuthProvider extends ChangeNotifier {
+  bool showOtpField = false;
   bool _isLoading = false;
+  String? imageName;
+  File? _profileImage;
   TextEditingController tcLoginEmail = TextEditingController();
   TextEditingController tcLoginOtp = TextEditingController();
 
   TextEditingController tcName = TextEditingController();
+  TextEditingController tcPhone = TextEditingController();
+  TextEditingController tcWhatsappNumber = TextEditingController();
   TextEditingController tcEmail = TextEditingController();
-  TextEditingController tcOtp = TextEditingController();
+  TextEditingController tcPassword = TextEditingController();
+  TextEditingController tcConfirmPassword = TextEditingController();
 
+  get profileImage => _profileImage;
   get isLoading => _isLoading;
 
   set isLoading(value) {
@@ -24,64 +31,50 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set profileImage(value) {
+    _profileImage = value;
+    notifyListeners();
+  }
+
   resetLogin() {
-    showLoginOtpField = false;
+    showOtpField = false;
     tcLoginEmail.clear;
     tcLoginOtp.clear;
     notifyListeners();
   }
 
   resetRegister() {
-    showRegisterOtpField = false;
     tcName.clear();
+    tcPhone.clear();
+    tcWhatsappNumber.clear();
     tcEmail.clear();
+    tcPassword.clear();
+    tcConfirmPassword.clear();
+    profileImage = null;
     notifyListeners();
   }
 
   final _authRepo = AuthRepository();
-
   // Register Vendor ----------->
-
-  userRegister(data, BuildContext context) async {
+  registerVendor(data, BuildContext context) async {
     isLoading = true;
     try {
-      final response = await _authRepo.userRegister(data);
-      final message = response.data['message'];
-      showRegisterOtpField = true;
-      await showFlushbar(
-        context: context,
-        color: Colors.green,
-        icon: Icons.check,
-        message: message,
-      );
-    } catch (e) {
-      // Display the parsed error message
-      showFlushbar(
-        context: context,
-        color: Colors.red,
-        icon: Icons.error,
-        message: e.toString().replaceAll('Exception: ', ''), // Clean up message
-      );
-      print("❌ Registration failed: $e");
-    } finally {
-      isLoading = false;
-    }
-  }
-  // verify Register Otp
+      final response = await _authRepo.registerVendor(data);
+      final userId = response.data['id'];
 
-  verifyRegisterOtp(data, BuildContext context) async {
-    isLoading = true;
-    try {
-      await _authRepo.verifyRegisterOtp(data);
+      await LocalStorage.saveUserType('vendor');
 
+      await LocalStorage.saveUser(userId);
+      await Provider.of<VendorProfileProvider>(context, listen: false)
+          .fetchUser(context);
       resetRegister();
 
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushReplacementNamed(context, '/vendorBottomBar');
       await showFlushbar(
         context: context,
         color: Colors.green,
         icon: Icons.check,
-        message: 'User Registration Successful ,Login to continue',
+        message: 'Vendor Registration Successful',
       );
     } catch (e) {
       // Display the parsed error message
@@ -96,13 +89,13 @@ class AuthProvider extends ChangeNotifier {
       isLoading = false;
     }
   }
-  // Login  ------------->
+  // Login Vendor ------------->
 
-  loginUser(data, BuildContext context) async {
+  loginVendor(data, BuildContext context) async {
     isLoading = true;
 
     try {
-      final response = await _authRepo.loginUser(data);
+      final response = await _authRepo.loginVendor(data);
 
       final message = response.data['message'];
 
@@ -112,9 +105,9 @@ class AuthProvider extends ChangeNotifier {
         icon: Icons.check,
         message: message,
       );
-      showLoginOtpField = true;
+      showOtpField = true;
       notifyListeners();
-    } catch (e) {
+    } on Exception catch (e) {
       // Display the parsed error message
       showFlushbar(
         context: context,
@@ -134,33 +127,20 @@ class AuthProvider extends ChangeNotifier {
     print('----------------------------------------------------->$data');
     try {
       final response = await _authRepo.loginOtpVerify(data);
-      print(response.data);
+      final message = response.data['message'];
+      final userId = response.data['vendor_admin_id'];
+      await LocalStorage.saveUserType('vendor');
 
-      if (response.data is Map<String, dynamic>) {
-        final message = response.data['message'] ?? 'Login successful!';
-        final userId = response.data['user_id'];
-
-        // Save user type locally
-        await LocalStorage.saveUserType('user');
-
-        // Save user ID locally
-        await LocalStorage.saveUser(userId);
-
-        // Fetch user profile
-        await Provider.of<ProfileProvider>(context, listen: false)
-            .fetchUser(context);
-
-        // Navigate to the home screen
-        Navigator.pushReplacementNamed(context, '/bottomBar');
-
-        // Show a success message
-        await showFlushbar(
-          context: context,
-          color: Colors.green,
-          icon: Icons.login,
-          message: message,
-        );
-      }
+      await LocalStorage.saveUser(userId);
+      await Provider.of<VendorProfileProvider>(context, listen: false)
+          .fetchUser(context);
+      Navigator.pushReplacementNamed(context, '/vendorBottomBar');
+      await showFlushbar(
+        context: context,
+        color: Colors.green,
+        icon: Icons.login,
+        message: message,
+      );
       resetLogin();
     } on Exception catch (e) {
       // Display the parsed error message
@@ -173,6 +153,17 @@ class AuthProvider extends ChangeNotifier {
       print("❌ Registration failed: $e");
     } finally {
       isLoading = false;
+    }
+  }
+
+  pickProfileImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      _profileImage = File(pickedFile.path);
+      imageName = basename(pickedFile.path);
+      notifyListeners();
     }
   }
 }

@@ -1,7 +1,7 @@
 import 'package:crafti_hub/user%20side/common/button.dart';
 import 'package:crafti_hub/user%20side/common/custom_app_bar.dart';
 import 'package:crafti_hub/user%20side/common/expandable_address_card.dart';
-import 'package:crafti_hub/user%20side/const/local_storage.dart';
+import 'package:crafti_hub/local_storage.dart';
 import 'package:crafti_hub/user%20side/screens/profile/about.dart';
 import 'package:crafti_hub/user%20side/screens/profile/pay.dart';
 import 'package:crafti_hub/user%20side/screens/profile/personal_info_setcion.dart';
@@ -71,13 +71,16 @@ class ProfilePage extends StatelessWidget {
   }) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      leading: Icon(icon, color: Colors.brown[800]),
+      leading: Icon(
+        icon,
+        color: Color.fromARGB(255, 0, 156, 177),
+      ),
       title: Text(
         title,
         style: TextStyle(
           fontSize: 15.sp,
           fontWeight: FontWeight.w500,
-          color: Colors.brown[900],
+          color: Colors.black,
         ),
       ),
       trailing: Icon(Icons.chevron_right, color: Colors.grey[600]),
@@ -122,7 +125,7 @@ class ProfilePage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: const Color.fromARGB(255, 40, 32, 0)),
+                Icon(icon, color: const Color.fromARGB(255, 0, 142, 185)),
                 const SizedBox(width: 5),
                 Text(
                   text,
@@ -148,9 +151,10 @@ class ProfilePage extends StatelessWidget {
         color: Colors.red,
         buttonName: 'Log Out',
         onPressed: () async {
+          await LocalStorage.clearUserType();
           await LocalStorage.clearUser();
           Navigator.pushNamedAndRemoveUntil(
-              context, '/login', (route) => false);
+              context, '/welcomePage', (route) => false);
         },
       ),
     );

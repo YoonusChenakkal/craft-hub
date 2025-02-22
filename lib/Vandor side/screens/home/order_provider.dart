@@ -1,9 +1,9 @@
+import 'package:crafti_hub/Vandor%20side/screens/home/order_model.dart';
+import 'package:crafti_hub/Vandor%20side/screens/home/order_repository.dart';
 import 'package:crafti_hub/local_storage.dart';
-import 'package:crafti_hub/user%20side/screens/orders/order_model.dart';
-import 'package:crafti_hub/user%20side/screens/orders/order_repository.dart';
 import 'package:flutter/material.dart';
 
-class OrderProvider extends ChangeNotifier {
+class VendorOrderProvider extends ChangeNotifier {
   List<Order> orders = [];
   bool _isLoading = false;
 
