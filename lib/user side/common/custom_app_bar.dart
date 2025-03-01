@@ -36,7 +36,7 @@ homeAppBar({required String userName, required VoidCallback onPressed}) {
           'welcome',
           style: TextStyle(
             fontSize: 18,
-            color: const Color.fromARGB(255, 247, 235, 230),
+            color: const Color.fromARGB(255, 230, 247, 247),
             fontWeight: FontWeight.w500,
           ),
         ),

@@ -31,10 +31,10 @@ class ProductRepository {
   }
 
   //  Fetch Products
-  Future fetchProducts() async {
+  Future fetchProducts(userId) async {
     try {
       Response response = await dio.get(
-          'https://purpleecommerce.pythonanywhere.com/productsapp/vendors/10/products');
+          'https://purpleecommerce.pythonanywhere.com/productsapp/vendors/$userId/products');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print(response.data);
@@ -62,7 +62,7 @@ class ProductRepository {
     required String productName,
     required String productDescription,
     required String price,
-    required String offerPrice,
+    required String discount,
     required int categoryId,
     required List<File> images,
     required bool isOfferProduct,
@@ -82,13 +82,14 @@ class ProductRepository {
         "product_name": productName,
         "product_description": productDescription,
         "price": price,
-        "offer_price": offerPrice,
+        "discount": discount,
         "images": multipartImages, // Send as MultipartFile list
         "isofferproduct": isOfferProduct,
         "Popular_products": isPopularProduct,
         "newarrival": isNewArrival,
         "trending_one": isTrendingProduct,
       });
+      print(formData);
 
       // Print all data to the console
       print("Data being sent to the API:");
@@ -97,7 +98,7 @@ class ProductRepository {
       print("Product Name: $productName");
       print("Product Description: $productDescription");
       print("Price: $price");
-      print("Offer Price: $offerPrice");
+      print("Offer Price: $discount");
       print("Images: ${multipartImages}"); // Print image paths
       print("Is Offer Product: true");
       print("Popular Product: false");
@@ -111,6 +112,7 @@ class ProductRepository {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print('✅ Product added successfully');
+        print(response.data);
       } else {
         throw Exception('Failed to add product: ${response.statusCode}');
       }
@@ -171,6 +173,34 @@ class ProductRepository {
         print('❌ API Error: $errorMessage');
         throw Exception(
             errorMessage.isNotEmpty ? errorMessage : 'Edit product failed');
+      } else {
+        throw Exception('❌ Network error: ${e.message}');
+      }
+    } catch (e) {
+      throw Exception('❌ Unexpected error: $e');
+    }
+  }
+
+  //Delete Product
+
+  Future<void> deleteProduct(int productId) async {
+    try {
+      Response response = await dio.delete(
+          'https://purpleecommerce.pythonanywhere.com/productsapp/product/$productId/');
+
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 204) {
+        print('✅ Product deleted successfully');
+      } else {
+        throw Exception('❌ Failed to delete product: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        String errorMessage = e.response!.data.entries.first.value;
+        print('❌ API Error: $errorMessage');
+        throw Exception(
+            errorMessage.isNotEmpty ? errorMessage : 'Delete product failed');
       } else {
         throw Exception('❌ Network error: ${e.message}');
       }

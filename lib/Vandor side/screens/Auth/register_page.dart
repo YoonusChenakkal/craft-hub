@@ -156,7 +156,8 @@ class VendorRegisterPage extends StatelessWidget {
                     TextButton(
                         onPressed: () {
                           authProvider.resetRegister();
-                          Navigator.pushReplacementNamed(context, '/vendorLogin');
+                          Navigator.pushReplacementNamed(
+                              context, '/vendorLogin');
                         },
                         child: Text(
                           'Login',

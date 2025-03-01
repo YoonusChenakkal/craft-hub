@@ -1,5 +1,7 @@
+import 'package:crafti_hub/Vandor%20side/screens/products/product_Provider.dart';
 import 'package:crafti_hub/Vandor%20side/screens/products/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
@@ -11,6 +13,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double offerPrice = product.offerPrice ?? 0.0;
     double price = (product.price) ?? 0.0;
+    final productProvider = Provider.of<VendorProductProvider>(context);
 
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -95,7 +98,10 @@ class ProductCard extends StatelessWidget {
                           Icons.delete,
                           color: Colors.red,
                         ),
-                        onPressed: () => '',
+                        onPressed: () => productProvider.deleteProduct(
+                          product.id,
+                          context,
+                        ),
                       ),
                     ],
                   ),

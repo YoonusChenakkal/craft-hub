@@ -87,7 +87,7 @@ class VendorAddProductPage extends StatelessWidget {
 
                 // Offer Price
                 TextFormField(
-                  controller: productProvider.tcOfferPrice,
+                  controller: productProvider.tcDiscount,
                   validator: emptyCheckValidator,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
@@ -95,7 +95,7 @@ class VendorAddProductPage extends StatelessWidget {
                     FilteringTextInputFormatter.digitsOnly,
                   ],
                   decoration: textFormFieldDecoration(
-                    hinttext: 'Offer Price',
+                    hinttext: 'Discount',
                     prefixIcon: Icons.currency_exchange_rounded,
                   ),
                 ),
@@ -160,6 +160,15 @@ class VendorAddProductPage extends StatelessWidget {
                           color: Colors.red,
                           icon: Icons.category_rounded,
                           message: 'Please select Category',
+                        );
+                      } else if (int.parse(productProvider.tcPrice.text) -
+                              int.parse(productProvider.tcDiscount.text) <=
+                          0) {
+                        showFlushbar(
+                          context: context,
+                          color: Colors.red,
+                          icon: Icons.error_outline,
+                          message: 'You can not give discount more than price',
                         );
                       } else {
                         productProvider.addProduct(context);

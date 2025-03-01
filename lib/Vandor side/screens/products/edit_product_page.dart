@@ -34,7 +34,7 @@ class VendorEditProductPage extends StatelessWidget {
     );
 
     productProvider.tcPrice.text = product.price.toString();
-    productProvider.tcOfferPrice.text = product.offerPrice.toString();
+    productProvider.tcDiscount.text = product.discount.toString();
     productProvider.isOfferProduct = product.isOfferProduct;
     productProvider.isPopular = product.popularProducts;
     productProvider.isNewArrival = product.newArrival;
@@ -100,7 +100,7 @@ class VendorEditProductPage extends StatelessWidget {
 
                 // Offer Price
                 TextFormField(
-                  controller: productProvider.tcOfferPrice,
+                  controller: productProvider.tcDiscount,
                   validator: emptyCheckValidator,
                   keyboardType: TextInputType.number,
                   inputFormatters: [

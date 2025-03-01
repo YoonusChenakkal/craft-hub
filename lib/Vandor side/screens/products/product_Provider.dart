@@ -18,7 +18,7 @@ class VendorProductProvider extends ChangeNotifier {
   TextEditingController tcProductName = TextEditingController();
   TextEditingController tcProductDescription = TextEditingController();
   TextEditingController tcPrice = TextEditingController();
-  TextEditingController tcOfferPrice = TextEditingController();
+  TextEditingController tcDiscount = TextEditingController();
 
   bool _isPopular = false;
 
@@ -135,9 +135,10 @@ class VendorProductProvider extends ChangeNotifier {
 
   fetchProducts(BuildContext context) async {
     isLoading = true;
+    final userId = await LocalStorage.getUser();
 
     try {
-      final response = await _productRepo.fetchProducts();
+      final response = await _productRepo.fetchProducts(userId);
 
       products = (response.data as List)
           .map((item) => ProductModel.fromJson(item))
@@ -145,14 +146,9 @@ class VendorProductProvider extends ChangeNotifier {
 
       print('Sucess Product Fetch');
       notifyListeners();
-    } on Exception catch (e) {
+    } catch (e) {
       // Display the parsed error message
-      showFlushbar(
-        context: context,
-        color: Colors.red,
-        icon: Icons.error,
-        message: 'Fetching Products Failed',
-      );
+
       print("❌ Fetching Products failed: $e");
     } finally {
       isLoading = false;
@@ -183,7 +179,7 @@ class VendorProductProvider extends ChangeNotifier {
         productName: tcProductName.text,
         productDescription: tcProductDescription.text,
         price: tcPrice.text,
-        offerPrice: tcOfferPrice.text,
+        discount: tcDiscount.text,
         categoryId: selectedCategory!.id,
         images: selectedImages,
         isOfferProduct: isOfferProduct,
@@ -229,7 +225,7 @@ class VendorProductProvider extends ChangeNotifier {
         productName: tcProductName.text,
         productDescription: tcProductDescription.text,
         price: tcPrice.text,
-        offerPrice: tcOfferPrice.text,
+        offerPrice: tcDiscount.text,
         categoryId: selectedCategory!.id,
         isOfferProduct: isOfferProduct,
         isNewArrival: isNewArrival,
@@ -239,6 +235,7 @@ class VendorProductProvider extends ChangeNotifier {
 
       print('✅ Product Updated successfully');
       fetchProducts(context);
+      notifyListeners();
       Navigator.pop(context);
       await showFlushbar(
         context: context,
@@ -263,11 +260,46 @@ class VendorProductProvider extends ChangeNotifier {
     }
   }
 
+  // delete product
+
+  Future<void> deleteProduct(int productId, BuildContext context) async {
+    print('Deleting Product: $productId');
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      // Call API to delete product
+      await _productRepo.deleteProduct(productId);
+
+      print('✅ Product Deleted successfully');
+      await showFlushbar(
+        context: context,
+        color: Colors.red,
+        icon: Icons.check_circle,
+        message: 'Product Deleted successfully!',
+      );
+      fetchProducts(context);
+      // Clear form after success
+      reset();
+    } catch (e) {
+      showFlushbar(
+        context: context,
+        color: Colors.red,
+        icon: Icons.error,
+        message: 'Deleting Product Failed', // Clear error message
+      );
+      print("❌ Product Deleting failed: $e");
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
   reset() {
     tcProductName.clear();
     tcProductDescription.clear();
     tcPrice.clear();
-    tcOfferPrice.clear();
+    tcDiscount.clear();
     selectedImages.clear();
     selectedCategory = null;
 

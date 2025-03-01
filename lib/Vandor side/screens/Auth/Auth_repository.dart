@@ -70,14 +70,19 @@ class AuthRepository {
         throw Exception('Unexpected status code: ${response.statusCode}');
       }
     } on DioException catch (e) {
-      // Handle 400 errors and other Dio exceptions
       if (e.response != null) {
         String errorMessage = '';
-        errorMessage = e.response!.data.entries.first.value[0];
+
+        if (e.response!.data is Map<String, dynamic>) {
+          var firstValue = e.response!.data.values.first; // Get the first value
+          errorMessage =
+              firstValue is String ? firstValue : firstValue.toString();
+        }
+
         print('---------------->${errorMessage}');
 
         throw Exception(
-            errorMessage.isNotEmpty ? errorMessage : 'Sent otp failed');
+            errorMessage.isNotEmpty ? errorMessage : 'Sent OTP failed');
       } else {
         throw Exception('Network error: ${e.message}');
       }

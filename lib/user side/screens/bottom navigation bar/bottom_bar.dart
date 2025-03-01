@@ -44,7 +44,8 @@ class _BottomBarState extends State<BottomBar> {
           onTap: _onItemTapped,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Products'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.store), label: 'Categories'),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
           ],
         ),

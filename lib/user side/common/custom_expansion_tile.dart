@@ -21,6 +21,7 @@ class CustomExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: const Color.fromARGB(255, 248, 248, 248),
       margin: const EdgeInsets.only(bottom: 16),
       child: Theme(
         data: Theme.of(context).copyWith(

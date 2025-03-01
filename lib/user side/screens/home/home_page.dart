@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crafti_hub/user%20side/common/custom_app_bar.dart';
 import 'package:crafti_hub/user%20side/screens/home/carousels.dart';
 import 'package:crafti_hub/user%20side/screens/home/home_provider.dart';
@@ -40,13 +39,13 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (homeProvider.promoBanners.isNotEmpty) PromoBanner(),
+            if (homeProvider.carousels.isNotEmpty) Carousels(),
             if (homeProvider.popularProducts.isNotEmpty) ...[
               Padding(
                 padding: const EdgeInsets.only(left: 12),
                 child: Text(
                   textScaler: TextScaler.noScaling,
-                  'Popular',
+                  'Popular Products',
                   style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: 20,
@@ -61,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(left: 12),
                 child: Text(
                   textScaler: TextScaler.noScaling,
-                  'offerProducts',
+                  'Offer Products',
                   style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: 20,
@@ -71,8 +70,8 @@ class _HomePageState extends State<HomePage> {
               ),
               rowProductSection(homeProvider.offerProducts)
             ],
-            if (homeProvider.carousels.isNotEmpty) Carousels(),
-            allProductSection()
+            if (homeProvider.promoBanners.isNotEmpty) PromoBanner(),
+            allProductSection(),
           ],
         ),
       ),

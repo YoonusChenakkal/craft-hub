@@ -14,7 +14,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(title: 'Profile'),
+      appBar: customAppBar(title: 'Profile', backLeading: false),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -34,30 +34,25 @@ class ProfilePage extends StatelessWidget {
 
   // Add this new widget method for settings section
   Widget _buildSettingsSection(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.0),
-          border: Border.all(color: const Color.fromARGB(255, 129, 63, 42)),
-        ),
-        child: Column(
-          children: [
-            _buildSettingsTile(
-              context,
-              icon: Icons.payment_outlined,
-              title: 'Payment Methods',
-              page: Pay(),
-            ),
-            _buildSettingsTile(
-              context,
-              icon: Icons.info,
-              title: 'About',
-              page: About(),
-            ),
-          ],
-        ),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0), border: Border.all()),
+      child: Column(
+        children: [
+          _buildSettingsTile(
+            context,
+            icon: Icons.payment_outlined,
+            title: 'Payment Methods',
+            page: Pay(),
+          ),
+          _buildSettingsTile(
+            context,
+            icon: Icons.info,
+            title: 'About',
+            page: About(),
+          ),
+        ],
       ),
     );
   }
@@ -119,6 +114,7 @@ class ProfilePage extends StatelessWidget {
       child: GestureDetector(
         onTap: onpressed,
         child: Card(
+          color: const Color.fromARGB(255, 248, 248, 248),
           shape: const StadiumBorder(),
           child: Padding(
             padding: const EdgeInsets.all(8.0),

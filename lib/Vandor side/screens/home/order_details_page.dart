@@ -14,9 +14,9 @@ class OrdersPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "Orders",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
         ),
-        backgroundColor: Colors.cyan,
+        backgroundColor: Colors.white,
       ),
       body: Padding(
         padding: EdgeInsets.all(3.h),
@@ -24,7 +24,9 @@ class OrdersPage extends StatelessWidget {
             ? const Center(
                 child: Text(
                   "No orders available",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
                 ),
               )
             : ListView.builder(

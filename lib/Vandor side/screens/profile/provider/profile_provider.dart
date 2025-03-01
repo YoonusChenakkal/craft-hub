@@ -19,7 +19,7 @@ class VendorProfileProvider extends ChangeNotifier {
 
   fetchUser(BuildContext context) async {
     isLoading = true;
-      int? userId = await LocalStorage.getUser();
+    int? userId = await LocalStorage.getUser();
     try {
       final response = await _profileRepo.fetchUser(userId);
 
@@ -34,6 +34,37 @@ class VendorProfileProvider extends ChangeNotifier {
         color: Colors.red,
         icon: Icons.error,
         message: 'Fetching User Failed', // Clean up message
+      );
+      print("❌ Registration failed: $e");
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  // edit User
+
+  editUser(BuildContext context, Map<String, dynamic> data) async {
+    isLoading = true;
+    int? userId = await LocalStorage.getUser();
+    try {
+      final response = await _profileRepo.editUser(userId, data);
+
+      fetchUser(context);
+      print('Sucess User Edit');
+      notifyListeners();
+      Navigator.pop(context);
+      await showFlushbar(
+          context: context,
+          color: Colors.green,
+          icon: Icons.check,
+          message: 'Profile Updated');
+    } catch (e) {
+      // Display the parsed error message
+      showFlushbar(
+        context: context,
+        color: Colors.red,
+        icon: Icons.error,
+        message: e.toString(), // Clean up message
       );
       print("❌ Registration failed: $e");
     } finally {

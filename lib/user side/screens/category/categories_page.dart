@@ -32,7 +32,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
         itemCount: categories.length,
         itemBuilder: (context, index) {
           return Card(
-            color: const Color.fromARGB(255, 234, 232, 232),
+            color: const Color.fromARGB(255, 248, 248, 248),
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: ListTile(
               onTap: () {

@@ -4,8 +4,10 @@ import 'package:crafti_hub/Vandor%20side/screens/home/order_card.dart';
 import 'package:crafti_hub/Vandor%20side/screens/home/order_details_page.dart';
 import 'package:crafti_hub/Vandor%20side/screens/home/order_model.dart';
 import 'package:crafti_hub/Vandor%20side/screens/home/order_provider.dart';
+import 'package:crafti_hub/Vandor%20side/screens/products/product_Provider.dart';
 import 'package:crafti_hub/Vandor%20side/screens/profile/provider/profile_provider.dart';
 import 'package:crafti_hub/Vandor%20side/screens/profile/model/user_model.dart';
+import 'package:crafti_hub/user%20side/common/flush_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -29,6 +31,7 @@ class _VendorHomePageState extends State<VendorHomePage> {
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<VendorProfileProvider>(context);
     final orderProvider = Provider.of<VendorOrderProvider>(context);
+    final productsProvider = Provider.of<VendorProductProvider>(context);
 
     final user = profileProvider.user;
     final orders = orderProvider.orders;
@@ -80,13 +83,15 @@ class _VendorHomePageState extends State<VendorHomePage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
 
               // Orders List
               (orders.isEmpty)
-                  ? const Center(child: Text("No orders yet"))
+                  ? const Center(
+                      child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 20.0),
+                          child: Text("No orders yet")))
                   : SizedBox(
-                      height: 24.h,
+                      height: 18.h,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: orders.length > 2
@@ -115,7 +120,7 @@ class _VendorHomePageState extends State<VendorHomePage> {
               Row(
                 children: [
                   _buildStatCard("Total Products",
-                      orderProvider.orders.length.toString(), Colors.blue),
+                      productsProvider.products.length.toString(), Colors.blue),
                   const SizedBox(width: 12),
                   _buildStatCard("Pending Orders", "0", Colors.orange),
                 ],
@@ -138,7 +143,9 @@ class _VendorHomePageState extends State<VendorHomePage> {
         padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
-            Icon(Icons.verified_user, size: 30, color: Colors.cyan[700]),
+            Icon(Icons.verified_user,
+                size: 30,
+                color: user.isApproved ? Colors.cyan[700] : Colors.yellow[700]),
             SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -147,27 +154,47 @@ class _VendorHomePageState extends State<VendorHomePage> {
                   Text(
                     "Verification",
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.cyan[900],
-                    ),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.cyan[900]),
                   ),
                   SizedBox(height: 4),
-                  Text(
-                    user.isApproved
-                        ? 'Verification Completed'
-                        : "Verification Pending - Under Review",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[700],
-                    ),
-                  ),
+                  user.isApproved
+                      ? Text(
+                          'Verification Completed',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[700],
+                          ),
+                        )
+                      : Text(
+                          "Verification Pending - Under Review",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.red[700],
+                          ),
+                        ),
                 ],
               ),
             ),
             SizedBox(width: 16),
             customRoundButton(
-              onPressed: user.isApproved ? () {} : () {},
+              onPressed: user.isApproved
+                  ? () {}
+                  : () {
+                      Provider.of<VendorProfileProvider>(context, listen: false)
+                          .fetchUser(context)
+                          .then(
+                        (_) {
+                          showFlushbar(
+                            context: context,
+                            color: Colors.green,
+                            icon: Icons.refresh,
+                            message: 'Verification status updated',
+                          );
+                        },
+                      );
+                    },
               textWidget: Text(
                 user.isApproved ? 'Done' : "Check",
                 style: TextStyle(

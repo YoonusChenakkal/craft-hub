@@ -1,4 +1,5 @@
 import 'package:crafti_hub/Vandor%20side/common/button.dart';
+import 'package:crafti_hub/Vandor%20side/screens/profile/edit_user.dart';
 import 'package:crafti_hub/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -109,20 +110,25 @@ class VendorProfilePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      'Enable Account',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    Switch(
-                      value: true,
-                      activeColor: Colors.green,
-                      onChanged: (bool value) {
-                        // Implement enable/disable functionality
+                    Icon(Icons.edit, color: Colors.cyan),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          profileProvider.fetchUser(context);
+                          return VendorEditPage();
+                        }));
                       },
-                    ),
+                      child: Text(
+                        'Edit Profile',
+                        style: TextStyle(
+                            color: Colors.cyan,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    )
                   ],
                 ),
               ),

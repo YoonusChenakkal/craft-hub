@@ -1,5 +1,5 @@
 import 'package:crafti_hub/user%20side/common/flush_bar.dart';
-import 'package:crafti_hub/user%20side/screens/home/carousel_model';
+import 'package:crafti_hub/user%20side/screens/home/carousel_model.dart';
 import 'package:crafti_hub/user%20side/screens/home/home_respository.dart';
 import 'package:crafti_hub/user%20side/screens/home/product_banner_model.dart';
 import 'package:crafti_hub/user%20side/screens/products/product_model.dart';

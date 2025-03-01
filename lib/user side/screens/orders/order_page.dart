@@ -63,29 +63,35 @@ class _OrderPageState extends State<OrderPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Order ID: ${order.orderIds}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Order ID: ${order.orderIds}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 14, vertical: 6),
-                              decoration: BoxDecoration(
-                                color: order.status == 'CONFIRMED'
-                                    ? Colors.green.shade100
-                                    : Colors.red.shade100,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                order.status,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                            Flexible(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14, vertical: 6),
+                                decoration: BoxDecoration(
                                   color: order.status == 'CONFIRMED'
-                                      ? Colors.green.shade800
-                                      : Colors.red.shade800,
+                                      ? Colors.green.shade100
+                                      : Colors.red.shade100,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  order.status,
+                                  style: TextStyle(
+                                    overflow: TextOverflow.clip,
+                                    fontWeight: FontWeight.bold,
+                                    color: order.status == 'CONFIRMED'
+                                        ? Colors.green.shade800
+                                        : Colors.red.shade800,
+                                  ),
                                 ),
                               ),
                             ),

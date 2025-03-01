@@ -21,6 +21,7 @@ class ProfileProvider extends ChangeNotifier {
   fetchUser(BuildContext context) async {
     isLoading = true;
     int? userId = await LocalStorage.getUser();
+    print(userId);
     try {
       final response = await _profileRepo.fetchUser(userId);
 
