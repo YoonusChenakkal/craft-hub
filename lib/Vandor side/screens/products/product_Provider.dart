@@ -9,9 +9,88 @@ import 'package:image_picker/image_picker.dart';
 
 class VendorProductProvider extends ChangeNotifier {
   List<ProductModel> products = [];
-  List<CategoryModel> categories = [];
+  List<CategoryModel> categories = [
+    CategoryModel(
+        id: 1,
+        name: 'Frames',
+        image: "assets/image1/frames.jpeg",
+        subCategories: [
+          SubCategoryModel(
+              id: 1,
+              image: "assets/image1/spot1 (1).jpeg",
+              name: 'Spotify Frames'),
+          SubCategoryModel(
+              id: 2, image: "assets/image1/hoopp.jpeg", name: 'Hoop Frames'),
+          SubCategoryModel(
+              id: 3, image: "assets/image1/number.jpeg", name: 'Number Frames'),
+          SubCategoryModel(
+              id: 4, image: "assets/image1/boxxx (1).jpeg", name: 'Box Frames'),
+          SubCategoryModel(
+              id: 5, image: "assets/image1/beeds.jpeg", name: 'Beed Frames'),
+          SubCategoryModel(
+              id: 6,
+              image: "assets/image1/polaroid.jpeg",
+              name: 'Polaroid Frames'),
+        ]),
+    CategoryModel(
+        id: 2,
+        name: 'Gift Hampers',
+        image: "assets/image1/gifthamper.jpeg",
+        subCategories: [
+          SubCategoryModel(
+              id: 1,
+              image: "assets/image1/shirt hamper.jpeg",
+              name: 'Shirt Hamper'),
+          SubCategoryModel(
+              id: 2, image: "assets/image1/giftham.jpeg", name: 'Gift Hamper'),
+        ]),
+    CategoryModel(
+        id: 3,
+        name: 'Bouquets',
+        image: "assets/image1/bouquets.jpeg",
+        subCategories: [
+          SubCategoryModel(
+              id: 1,
+              image: "assets/image1/bride.jpeg",
+              name: 'Bridal Bouquets'),
+          SubCategoryModel(
+              id: 2,
+              image: "assets/image1/flower.jpeg",
+              name: 'Flower Bouquets'),
+          SubCategoryModel(
+              id: 3, image: "assets/image1/candy.jpeg", name: 'Candy Bouquets'),
+        ]),
+    CategoryModel(
+        id: 4,
+        name: 'Resins',
+        image: "assets/image1/resin.jpeg",
+        subCategories: [
+          SubCategoryModel(
+              id: 1,
+              image: "assets/image1/clock1 (5).jpeg",
+              name: 'Clock Resins'),
+          SubCategoryModel(
+              id: 2,
+              image: "assets/image1/Rframe1 (5).jpeg",
+              name: 'Frame Resins'),
+          SubCategoryModel(
+              id: 3,
+              image: "assets/image1/jewe1 (5).jpeg",
+              name: 'Jewellery Resins'),
+          SubCategoryModel(
+              id: 4, image: "assets/image1/key1 (5).jpeg", name: 'Key Chain'),
+          SubCategoryModel(
+              id: 5, image: "assets/image1/pres1 (5).jpeg", name: 'Preserved '),
+          SubCategoryModel(
+              id: 6, image: "assets/image1/wall1 (5).jpeg", name: 'Decore'),
+          SubCategoryModel(
+              id: 7, image: "assets/image1/other1 (5).jpeg", name: 'Others')
+        ]),
+  ];
   List<File> _selectedImages = [];
-  CategoryModel? selectedCategory;
+  CategoryModel? _selectedCategory;
+  SubCategoryModel? _selectedSubCategory;
+  double _discountedPrice = 0.0;
   String _searchQuery = '';
 
   // Controllers for form fields
@@ -38,7 +117,11 @@ class VendorProductProvider extends ChangeNotifier {
 
   get isTrending => _isTrending;
   get isOfferProduct => _isOfferProduct;
+  get discountedPrice => _discountedPrice;
   List<File> get selectedImages => _selectedImages;
+  CategoryModel? get selectedCategory => _selectedCategory;
+  SubCategoryModel? get selectedSubCategory => _selectedSubCategory;
+
   List<ProductModel> get filteredProducts => products
       .where((product) =>
           product.vendorName.toLowerCase().contains(_searchQuery.toLowerCase()))
@@ -74,6 +157,21 @@ class VendorProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set selectedCategory(value) {
+    _selectedCategory = value;
+    notifyListeners();
+  }
+
+  set selectedSubCategory(value) {
+    _selectedSubCategory = value;
+    notifyListeners();
+  }
+
+  set discountedPrice(value) {
+    _discountedPrice = value;
+    notifyListeners();
+  }
+
   Future<void> pickImages() async {
     try {
       final ImagePicker _picker = ImagePicker();
@@ -106,32 +204,6 @@ class VendorProductProvider extends ChangeNotifier {
   }
 
   ProductRepository _productRepo = ProductRepository();
-
-  fetchCategories(BuildContext context) async {
-    isLoading = true;
-
-    try {
-      final response = await _productRepo.fetchCategories();
-
-      categories = (response.data as List)
-          .map((item) => CategoryModel.fromJson(item))
-          .toList();
-
-      print('Sucess User Fetch');
-      notifyListeners();
-    } on Exception catch (e) {
-      // Display the parsed error message
-      showFlushbar(
-        context: context,
-        color: Colors.red,
-        icon: Icons.error,
-        message: 'Fetching Categories Failed', // Clean up message
-      );
-      print("❌ Fetching Categories Failed : $e");
-    } finally {
-      isLoading = false;
-    }
-  }
 
   fetchProducts(BuildContext context) async {
     isLoading = true;
@@ -180,7 +252,8 @@ class VendorProductProvider extends ChangeNotifier {
         productDescription: tcProductDescription.text,
         price: tcPrice.text,
         discount: tcDiscount.text,
-        categoryId: selectedCategory!.id,
+        categoryname: selectedCategory!.name,
+        subcategoryname: selectedSubCategory!.name,
         images: selectedImages,
         isOfferProduct: isOfferProduct,
         isNewArrival: isNewArrival,
@@ -189,8 +262,9 @@ class VendorProductProvider extends ChangeNotifier {
       );
 
       print('✅ Product added successfully');
+      Navigator.pop(context);
 
-      showFlushbar(
+      await showFlushbar(
         context: context,
         color: Colors.green,
         icon: Icons.check_circle,
@@ -225,8 +299,9 @@ class VendorProductProvider extends ChangeNotifier {
         productName: tcProductName.text,
         productDescription: tcProductDescription.text,
         price: tcPrice.text,
-        offerPrice: tcDiscount.text,
-        categoryId: selectedCategory!.id,
+        discount: tcDiscount.text,
+       categoryname: selectedCategory?.name,
+        subcategoryname: selectedSubCategory?.name,
         isOfferProduct: isOfferProduct,
         isNewArrival: isNewArrival,
         isPopularProduct: isPopular,
@@ -239,7 +314,7 @@ class VendorProductProvider extends ChangeNotifier {
       Navigator.pop(context);
       await showFlushbar(
         context: context,
-        color: Colors.cyan,
+        color: Colors.brown,
         icon: Icons.check_circle,
         message: 'Product Updated successfully!',
       );

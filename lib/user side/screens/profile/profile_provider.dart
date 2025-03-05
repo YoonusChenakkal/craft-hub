@@ -70,4 +70,33 @@ class ProfileProvider extends ChangeNotifier {
       isLoading = false;
     }
   }
+
+  Future updateAddress(
+      BuildContext context, int addressId, Map<String, dynamic> data) async {
+        
+    isLoading = true;
+    try {
+      await _profileRepo.updateAddress(addressId, data);
+      Navigator.pop(context);
+      await showFlushbar(
+        context: context,
+        color: Colors.green,
+        icon: Icons.check,
+        message: ' Address updated',
+      );
+
+      fetchUser(context);
+      notifyListeners();
+    } on Exception catch (e) {
+      showFlushbar(
+        context: context,
+        color: Colors.red,
+        icon: Icons.error,
+        message: 'update Address Failed',
+      );
+      print("❌ update Address failed: $e");
+    } finally {
+      isLoading = false;
+    }
+  }
 }

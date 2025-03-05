@@ -15,11 +15,12 @@ class HomeRespository {
       if (response.statusCode == 200 || response.statusCode == 201) {
         print(response.data);
         return response;
-      } else {
+      } else {  
         // This block is not needed if using default validateStatus
         throw Exception('Unexpected status code: ${response.statusCode}');
       }
-    } on DioException catch (e) {
+    } on DioException catch (e) { 
+
       // Handle 400 errors and other Dio exceptions
       if (e.response != null) {
         String errorMessage = '';

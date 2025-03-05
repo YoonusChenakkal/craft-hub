@@ -66,10 +66,7 @@ class ProfilePage extends StatelessWidget {
   }) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      leading: Icon(
-        icon,
-        color: Color.fromARGB(255, 0, 156, 177),
-      ),
+      leading: Icon(icon, color: Colors.brown),
       title: Text(
         title,
         style: TextStyle(
@@ -121,7 +118,7 @@ class ProfilePage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: const Color.fromARGB(255, 0, 142, 185)),
+                Icon(icon, color: Colors.brown),
                 const SizedBox(width: 5),
                 Text(
                   text,

@@ -63,7 +63,8 @@ class ProductRepository {
     required String productDescription,
     required String price,
     required String discount,
-    required int categoryId,
+    required String categoryname,
+    required String subcategoryname,
     required List<File> images,
     required bool isOfferProduct,
     required bool isPopularProduct,
@@ -78,7 +79,9 @@ class ProductRepository {
 
       FormData formData = FormData.fromMap({
         "vendor": userId,
-        "category": categoryId,
+        "category": 1,
+        "categoryname": categoryname,
+        "subcategory": subcategoryname,
         "product_name": productName,
         "product_description": productDescription,
         "price": price,
@@ -89,12 +92,13 @@ class ProductRepository {
         "newarrival": isNewArrival,
         "trending_one": isTrendingProduct,
       });
-      print(formData);
 
       // Print all data to the console
       print("Data being sent to the API:");
       print("Vendor: 5");
-      print("Category ID: $categoryId");
+      print("Category ID: $categoryname");
+      print("Category ID: $subcategoryname");
+
       print("Product Name: $productName");
       print("Product Description: $productDescription");
       print("Price: $price");
@@ -136,8 +140,9 @@ class ProductRepository {
     required String productName,
     required String productDescription,
     required String price,
-    required String offerPrice,
-    required int categoryId,
+    required String discount,
+    String? categoryname,
+    String? subcategoryname,
     required bool isOfferProduct,
     required bool isPopularProduct,
     required bool isNewArrival,
@@ -145,17 +150,22 @@ class ProductRepository {
   }) async {
     try {
       FormData formData = FormData.fromMap({
-        "category_id": categoryId,
+        "category_id": 1,
         "product_name": productName,
         "product_description": productDescription,
+        if (categoryname != null && categoryname.isNotEmpty)
+          "categoryname": categoryname,
+        if (subcategoryname != null && subcategoryname.isNotEmpty)
+          "subcategory": subcategoryname,
         "price": price,
-        "offer_price": offerPrice,
+        "discount": discount,
         "isofferproduct": isOfferProduct,
         "Popular_products": isPopularProduct,
         "newarrival": isNewArrival,
         "trending_one": isTrendingProduct,
       });
-      print(formData);
+      print(subcategoryname);
+      print(categoryname);
       // Send PATCH request
       Response response = await dio.patch(
         'https://purpleecommerce.pythonanywhere.com/productsapp/product/$productId/',

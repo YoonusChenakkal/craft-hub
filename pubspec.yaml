@@ -1,6 +1,6 @@
 name: crafti_hub
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -12,6 +12,7 @@ dependencies:
   dio: ^5.8.0+1
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.3
   google_fonts: ^6.2.1
   image_picker: ^1.1.2
   intl: ^0.20.2
@@ -30,3 +31,12 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/image1/
+
+flutter_launcher_icons:
+  image_path: "assets/logo.jpg"
+  android: "launcher_icon"
+  ios: true
+  min_sdk_android: 24
+  adaptive_icon_background: "#ffffff" # You can use a color or image for the background
+  adaptive_icon_foreground: "assets/logo.jpg" # For adaptive icons on Android

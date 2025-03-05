@@ -7,6 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import 'package:crafti_hub/user%20side/common/button.dart';
+import 'package:crafti_hub/user%20side/common/custom_expansion_tile.dart';
+import 'package:crafti_hub/user%20side/common/flush_bar.dart';
+import 'package:crafti_hub/user%20side/common/table_row.dart';
+import 'package:crafti_hub/user%20side/screens/profile/profile_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
 class SavedAddressSection extends StatelessWidget {
   const SavedAddressSection({super.key});
 
@@ -17,10 +26,7 @@ class SavedAddressSection extends StatelessWidget {
 
     return CustomExpansionTile(
       initiallyExpanded: true,
-      leading: const Icon(
-        Icons.location_on,
-        color: Color.fromARGB(255, 0, 156, 177),
-      ),
+      leading: const Icon(Icons.location_on, color: Colors.brown),
       title: 'Address',
       children: [
         Padding(
@@ -42,34 +48,50 @@ class SavedAddressSection extends StatelessWidget {
                   ],
                 ),
         ),
-        if (userAddress == null || userAddress.isEmpty)
-          customButton(
-              isLoading: false,
-              color: Colors.cyan,
-              buttonName: '+ Address',
-              onPressed: () {
-                _showEditAddressDialog(context, profileProvider);
-              }),
-        SizedBox(
+        userAddress == null || userAddress.isEmpty
+            ? customButton(
+                isLoading: false,
+                color: Colors.brown,
+                buttonName: '+ Address',
+                onPressed: () {
+                  _showEditAddressDialog(context, profileProvider,
+                      isEdit: false);
+                })
+            : customButton(
+                isLoading: false,
+                color: Colors.brown,
+                buttonName: 'Edit Address',
+                onPressed: () {
+                  _showEditAddressDialog(context, profileProvider,
+                      isEdit: true);
+                }),
+        const SizedBox(
           height: 10,
         )
       ],
     );
   }
 
-  /// ✅ Edit Address Dialog (Null-Safe)
+  /// ✅ Address Dialog Box (Supports Add & Edit Mode)
   void _showEditAddressDialog(
-      BuildContext context, ProfileProvider profileProvider) {
-    final tcAddress = TextEditingController();
-    final tcCity = TextEditingController();
-    final tcState = TextEditingController();
-    final tcPincode = TextEditingController();
-    final tcArea = TextEditingController();
+      BuildContext context, ProfileProvider profileProvider,
+      {bool isEdit = false}) {
+    final userAddress = profileProvider.user?.addresses;
+    final addressData = isEdit && userAddress != null && userAddress.isNotEmpty
+        ? userAddress[0]
+        : null;
+
+    final tcAddress =
+        TextEditingController(text: addressData?.addressLine1 ?? '');
+    final tcArea = TextEditingController(text: addressData?.addressLine2 ?? '');
+    final tcCity = TextEditingController(text: addressData?.city ?? '');
+    final tcState = TextEditingController(text: addressData?.state ?? '');
+    final tcPincode = TextEditingController(text: addressData?.pincode ?? '');
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Edit Address'),
+        title: Text(isEdit ? 'Edit Address' : 'Add Address'),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -111,7 +133,7 @@ class SavedAddressSection extends StatelessWidget {
           ),
           TextButton(
             onPressed: () async {
-              // Ensure all fields are filled
+              // Validation
               if (tcAddress.text.isEmpty ||
                   tcCity.text.isEmpty ||
                   tcState.text.isEmpty ||
@@ -126,7 +148,7 @@ class SavedAddressSection extends StatelessWidget {
               }
 
               final data = {
-                "user": profileProvider.user?.id,
+                if (!isEdit) "user": profileProvider.user?.id,
                 "address_line1": tcAddress.text,
                 "state": tcState.text,
                 "pincode": tcPincode.text,
@@ -135,9 +157,14 @@ class SavedAddressSection extends StatelessWidget {
                 "address_line2": tcArea.text
               };
 
-              await profileProvider.addAddress(context, data);
+              if (isEdit) {
+                profileProvider.updateAddress(
+                    context, userAddress![0].id, data);
+              } else {
+                await profileProvider.addAddress(context, data);
+              }
             },
-            child: const Text('Save'),
+            child: Text(isEdit ? 'Update' : 'Save'),
           ),
         ],
       ),

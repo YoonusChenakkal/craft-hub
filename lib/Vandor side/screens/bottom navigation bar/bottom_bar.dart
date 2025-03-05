@@ -13,7 +13,11 @@ class VendorBottomBar extends StatefulWidget {
 class _BottomBarState extends State<VendorBottomBar> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = [VendorHomePage(), VendorProductsPage(), VendorProfilePage()];
+  final List<Widget> _screens = [
+    VendorHomePage(),
+    VendorProductsPage(),
+    VendorProfilePage()
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -37,8 +41,8 @@ class _BottomBarState extends State<VendorBottomBar> {
       child: Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex,
-          backgroundColor: Colors.cyan,
-          unselectedItemColor: const Color.fromARGB(255, 186, 247, 255),
+          backgroundColor: Colors.brown,
+          unselectedItemColor: const Color.fromARGB(255, 255, 218, 186),
           selectedItemColor: Colors.white,
           onTap: _onItemTapped,
           items: const [

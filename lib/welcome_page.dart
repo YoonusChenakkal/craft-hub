@@ -25,7 +25,7 @@ class WelcomePage extends StatelessWidget {
                     Navigator.pushNamed(context, '/login');
                   },
                   buttonName: 'User',
-                  color: Colors.cyan),
+                  color: Colors.brown),
               SizedBox(
                 height: 2.h,
               ),
@@ -34,7 +34,7 @@ class WelcomePage extends StatelessWidget {
                     Navigator.pushNamed(context, '/vendorLogin');
                   },
                   buttonName: 'Vendor',
-                  color: Colors.cyan),
+                  color: Colors.brown),
             ],
           ),
         ),
@@ -44,7 +44,7 @@ class WelcomePage extends StatelessWidget {
 
   logo() {
     return CircleAvatar(
-      backgroundColor: Colors.cyan,
+      backgroundColor: Colors.brown,
       radius: 16.w,
       child: FittedBox(
         child: Text(

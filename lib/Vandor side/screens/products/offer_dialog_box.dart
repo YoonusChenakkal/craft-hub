@@ -16,7 +16,7 @@ class OfferDialogBox extends StatelessWidget {
       required ValueChanged<bool?> onChanged,
     }) {
       return CheckboxListTile(
-        activeColor: Colors.cyan,
+        activeColor: Colors.brown,
         title: Text(title),
         value: value,
         onChanged: onChanged,
@@ -70,7 +70,7 @@ class OfferDialogBox extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.cyan,
+              backgroundColor: Colors.brown,
               foregroundColor: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               shape: RoundedRectangleBorder(

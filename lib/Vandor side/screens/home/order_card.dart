@@ -85,7 +85,7 @@ class OrderCard extends StatelessWidget {
                 "₹${order.totalPrice.toStringAsFixed(2)}",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.cyan,
+                  color: Colors.brown,
                 ),
               ),
             ],

@@ -4,6 +4,9 @@ class ProductModel {
   final String vendorName;
   final int category;
   final String categoryName;
+  final String? subcategory;
+  final String? displaycategoryname;
+
   final String productName;
   final String productDescription;
   final double price;
@@ -21,6 +24,8 @@ class ProductModel {
     required this.vendor,
     required this.vendorName,
     required this.category,
+    this.subcategory,
+    this.displaycategoryname,
     required this.categoryName,
     required this.productName,
     required this.productDescription,
@@ -43,6 +48,8 @@ class ProductModel {
       vendorName: json['vendor_name'],
       category: json['category'],
       categoryName: json['category_name'],
+      subcategory: json['subcategory'],
+      displaycategoryname: json['categoryname'],
       productName: json['product_name'],
       productDescription: json['product_description'],
       price: double.tryParse(json['price'].toString()) ?? 0.0,
@@ -69,6 +76,8 @@ class ProductModel {
       'vendor_name': vendorName,
       'category': category,
       'category_name': categoryName,
+      "subcategory": subcategory,
+      "categoryname": displaycategoryname,
       'product_name': productName,
       'product_description': productDescription,
       'price': price.toStringAsFixed(2),

@@ -145,7 +145,7 @@ class VendorRegisterPage extends StatelessWidget {
                       }
                     },
                     buttonName: 'Register',
-                    color: Colors.cyan),
+                    color: Colors.brown),
                 space,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -161,7 +161,7 @@ class VendorRegisterPage extends StatelessWidget {
                         },
                         child: Text(
                           'Login',
-                          style: TextStyle(color: Colors.cyan),
+                          style: TextStyle(color: Colors.brown),
                         ))
                   ],
                 )

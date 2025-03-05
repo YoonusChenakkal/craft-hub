@@ -14,6 +14,8 @@ class ProductDetailPage extends StatelessWidget {
     final double savings = product.price - product.offerPrice;
     final bool hasDiscount = product.offerPrice < product.price;
 
+    
+
     return Scaffold(
       appBar: customAppBar(title: 'Product Details'),
       body: Column(
@@ -194,7 +196,7 @@ class ProductDetailPage extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () => _showAddToCartDialog(context, product),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.cyan,
+                backgroundColor: Colors.brown,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),

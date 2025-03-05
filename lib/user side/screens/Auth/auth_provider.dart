@@ -72,11 +72,24 @@ class AuthProvider extends ChangeNotifier {
   verifyRegisterOtp(data, BuildContext context) async {
     isLoading = true;
     try {
-      await _authRepo.verifyRegisterOtp(data);
+      final response = await _authRepo.verifyRegisterOtp(data);
+      final userId = response.data['id'];
+      print(userId);
 
       resetRegister();
 
-      Navigator.pushReplacementNamed(context, '/login');
+      // Save user type locally
+      await LocalStorage.saveUserType('user');
+
+      // Save user ID locally
+      await LocalStorage.saveUser(userId);
+
+      // Fetch user profile
+      await Provider.of<ProfileProvider>(context, listen: false)
+          .fetchUser(context);
+
+      // Navigate to the home screen
+      Navigator.pushReplacementNamed(context, '/bottomBar');
       await showFlushbar(
         context: context,
         color: Colors.green,

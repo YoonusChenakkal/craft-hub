@@ -120,7 +120,7 @@ class OrdersPage extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.cyan,
+                                  color: Colors.brown,
                                 ),
                               ),
                             ],

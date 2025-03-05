@@ -140,34 +140,38 @@ class _CartPageState extends State<CartPage> {
                 'Total:',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              DropdownButton<String>(
-                value: selectedPayment,
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    if (newValue == 'Online Payment') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content:
-                              Text('Online Payment is currently unavailable.'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    } else {
-                      selectedPayment = newValue;
+              SizedBox(
+                width: 50.w, // Set the width to 50% of screen width
+                child: DropdownButton<String>(
+                  isExpanded: true, // Ensure it takes full width
+                  value: selectedPayment,
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      if (newValue == 'Online Payment') {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Online Payment is currently unavailable.'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      } else {
+                        selectedPayment = newValue;
+                      }
                     }
-                  }
-                },
-                items: [
-                  DropdownMenuItem(
-                    value: 'Cash on Delivery',
-                    child: Text('Cash on Delivery'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Online Payment',
-                    child: Text('Online Payment (Unavailable)',
-                        style: TextStyle(color: Colors.grey)),
-                  ),
-                ],
+                  },
+                  items: [
+                    DropdownMenuItem(
+                      value: 'Cash on Delivery',
+                      child: Text('Cash on Delivery'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Online Payment',
+                      child: Text('Online Payment (Unavailable)',
+                          style: TextStyle(color: Colors.grey)),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

@@ -14,10 +14,7 @@ class PersonalInfoSetcion extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<ProfileProvider>(context).user;
     return CustomExpansionTile(
-        leading: const Icon(
-          Icons.person,
-          color: Color.fromARGB(255, 0, 156, 177),
-        ),
+        leading: const Icon(Icons.person, color: Colors.brown),
         title: 'Personal Info',
         children: [
           Padding(

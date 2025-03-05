@@ -103,7 +103,7 @@ class _VendorEditPageState extends State<VendorEditPage> {
                     }
                   },
                   buttonName: 'Update',
-                  color: Colors.cyan,
+                  color: Colors.brown,
                 ),
               ],
             ),
@@ -119,7 +119,7 @@ class _VendorEditPageState extends State<VendorEditPage> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Colors.cyan[50],
+            color: Colors.brown[50],
             borderRadius: BorderRadius.circular(10),
           ),
           child: Container(
@@ -149,7 +149,7 @@ class _VendorEditPageState extends State<VendorEditPage> {
           child: Icon(
             Icons.change_circle,
             size: 50,
-            color: Colors.cyan,
+            color: Colors.brown,
           ),
         ),
       ],

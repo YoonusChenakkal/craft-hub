@@ -20,6 +20,7 @@ class VendorAddProductPage extends StatelessWidget {
     final productProvider = Provider.of<VendorProductProvider>(
       context,
     );
+
     String getSelectedOffers(VendorProductProvider productProvider) {
       List<String> selectedOffers = [];
 
@@ -31,154 +32,159 @@ class VendorAddProductPage extends StatelessWidget {
       return selectedOffers.isNotEmpty ? selectedOffers.join(', ') : 'Select';
     }
 
-    return Scaffold(
-      appBar: customAppBar(title: 'Add Product'),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                SizedBox(height: 2.h),
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) => productProvider.reset(),
+      child: Scaffold(
+        appBar: customAppBar(title: 'Add Product', leading: false),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  SizedBox(height: 2.h),
 
-                // Image Upload Section
-                ImagePickSection(),
+                  // Image Upload Section
+                  ImagePickSection(),
 
-                SizedBox(height: 3.h),
+                  SizedBox(height: 3.h),
 
-                // Product Name
-                TextFormField(
-                  controller: productProvider.tcProductName,
-                  validator: emptyCheckValidator,
-                  decoration: textFormFieldDecoration(
-                    hinttext: 'Product Name',
-                    prefixIcon: Icons.production_quantity_limits_outlined,
-                  ),
-                ),
-                SizedBox(height: 1.h),
-
-                // Product Description
-                TextFormField(
-                  controller: productProvider.tcProductDescription,
-                  validator: emptyCheckValidator,
-                  decoration: textFormFieldDecoration(
-                    hinttext: 'Product Description',
-                    prefixIcon: Icons.description_outlined,
-                  ),
-                ),
-                SizedBox(height: 1.h),
-
-                // Price
-                TextFormField(
-                  controller: productProvider.tcPrice,
-                  keyboardType: TextInputType.number,
-                  validator: emptyCheckValidator,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(6),
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                  decoration: textFormFieldDecoration(
-                    hinttext: 'Price',
-                    prefixIcon: Icons.currency_rupee,
-                  ),
-                ),
-                SizedBox(height: 1.h),
-
-                // Offer Price
-                TextFormField(
-                  controller: productProvider.tcDiscount,
-                  validator: emptyCheckValidator,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(6),
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                  decoration: textFormFieldDecoration(
-                    hinttext: 'Discount',
-                    prefixIcon: Icons.currency_exchange_rounded,
-                  ),
-                ),
-                SizedBox(height: 1.h),
-
-                // Select Category
-                InkWell(
-                  onTap: () async {
-                    if (!productProvider.isLoading) {
-                      await productProvider.fetchCategories(
-                          context); // Fetch categories before opening the dialog
-                      showCategoryDialog(context);
-                    }
-                  },
-                  child: TextFormField(
-                    enabled: false,
+                  // Product Name
+                  TextFormField(
+                    controller: productProvider.tcProductName,
+                    validator: emptyCheckValidator,
                     decoration: textFormFieldDecoration(
-                      hinttext: productProvider.isLoading
-                          ? 'Fetching Categories...'
-                          : (productProvider.selectedCategory == null
-                              ? 'Select Category'
-                              : productProvider.selectedCategory!.categoryName),
-                      prefixIcon: Icons.category_outlined,
+                      hinttext: 'Product Name',
+                      prefixIcon: Icons.production_quantity_limits_outlined,
                     ),
                   ),
-                ),
+                  SizedBox(height: 1.h),
 
-                SizedBox(height: 1.h),
-
-                // selct  Offers
-                InkWell(
-                  onTap: () {
-                    showOfferDialogBox(context);
-                  },
-                  child: TextFormField(
-                    enabled: false,
+                  // Product Description
+                  TextFormField(
+                    controller: productProvider.tcProductDescription,
+                    validator: emptyCheckValidator,
                     decoration: textFormFieldDecoration(
-                      hinttext: getSelectedOffers(productProvider),
-                      prefixIcon: Icons.local_offer_outlined,
+                      hinttext: 'Product Description',
+                      prefixIcon: Icons.description_outlined,
                     ),
                   ),
-                ),
+                  SizedBox(height: 1.h),
 
-                SizedBox(height: 3.h),
+                  // Price
+                  TextFormField(
+                    controller: productProvider.tcPrice,
+                    keyboardType: TextInputType.number,
+                    validator: emptyCheckValidator,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(6),
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    decoration: textFormFieldDecoration(
+                      hinttext: 'Price',
+                      prefixIcon: Icons.currency_rupee,
+                    ),
+                  ),
+                  SizedBox(height: 1.h),
 
-                // Add Product Button
-                customButton(
-                  isLoading: productProvider.isLoading,
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      if (productProvider.selectedImages.isEmpty) {
-                        showFlushbar(
-                          context: context,
-                          color: Colors.red,
-                          icon: Icons.image_not_supported,
-                          message: 'Please select at least one product image',
-                        );
-                        return;
-                      } else if (productProvider.selectedCategory == null) {
-                        showFlushbar(
-                          context: context,
-                          color: Colors.red,
-                          icon: Icons.category_rounded,
-                          message: 'Please select Category',
-                        );
-                      } else if (int.parse(productProvider.tcPrice.text) -
-                              int.parse(productProvider.tcDiscount.text) <=
-                          0) {
-                        showFlushbar(
-                          context: context,
-                          color: Colors.red,
-                          icon: Icons.error_outline,
-                          message: 'You can not give discount more than price',
-                        );
-                      } else {
-                        productProvider.addProduct(context);
+                  // Discount
+                  InkWell(
+                    onTap: () {
+                      showDiscountDialog(context, productProvider);
+                    },
+                    child: TextFormField(
+                      enabled: false,
+                      controller: productProvider.tcDiscount,
+                      decoration: textFormFieldDecoration(
+                        hinttext: productProvider.tcDiscount.text.isEmpty
+                            ? 'Enter Discount %'
+                            : 'Discount: ${productProvider.tcDiscount.text}%',
+                        prefixIcon: Icons.currency_exchange_rounded,
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 1.h),
+
+                  // Select Category
+                  InkWell(
+                    onTap: () async {
+                      if (!productProvider.isLoading) {
+                        showCategoryDialog(context);
                       }
-                    }
-                  },
-                  buttonName: 'Add Product',
-                  color: Colors.cyan,
-                ),
-              ],
+                    },
+                    child: TextFormField(
+                      enabled: false,
+                      decoration: textFormFieldDecoration(
+                        hinttext: productProvider.selectedCategory == null
+                            ? 'Select Category'
+                            : '${productProvider.selectedCategory?.name} - ${productProvider.selectedSubCategory?.name ?? 'select Sub Category'}',
+                        prefixIcon: Icons.category_outlined,
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 1.h),
+
+                  // selct  Offers
+                  InkWell(
+                    onTap: () {
+                      showOfferDialogBox(context);
+                    },
+                    child: TextFormField(
+                      enabled: false,
+                      decoration: textFormFieldDecoration(
+                        hinttext: getSelectedOffers(productProvider),
+                        prefixIcon: Icons.local_offer_outlined,
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 3.h),
+
+                  // Add Product Button
+                  customButton(
+                    isLoading: productProvider.isLoading,
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        if (productProvider.selectedImages.isEmpty) {
+                          showFlushbar(
+                            context: context,
+                            color: Colors.red,
+                            icon: Icons.image_not_supported,
+                            message: 'Please select at least one product image',
+                          );
+                          return;
+                        } else if (productProvider.selectedCategory == null ||
+                            productProvider.selectedSubCategory == null) {
+                          showFlushbar(
+                            context: context,
+                            color: Colors.red,
+                            icon: Icons.category_rounded,
+                            message: 'Please select Category and Sub Category',
+                          );
+                        } else if (int.parse(productProvider.tcPrice.text) -
+                                int.parse(productProvider.tcDiscount.text) <=
+                            0) {
+                          showFlushbar(
+                            context: context,
+                            color: Colors.red,
+                            icon: Icons.error_outline,
+                            message:
+                                'You can not give discount more than price',
+                          );
+                        } else {
+                          productProvider.addProduct(context);
+                        }
+                      }
+                    },
+                    buttonName: 'Add Product',
+                    color: Colors.brown,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -200,6 +206,82 @@ class VendorAddProductPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return CategoryDialogBox();
+      },
+    );
+  }
+
+  void showDiscountDialog(
+      BuildContext context, VendorProductProvider productProvider) {
+    TextEditingController discountController = TextEditingController();
+    double price = double.tryParse(productProvider.tcPrice.text) ?? 0.0;
+    double discountedPrice = price; // Local state variable for updating UI
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text("Enter Discount Percentage"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: discountController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    decoration: InputDecoration(
+                      hintText: 'Enter discount %',
+                      prefixIcon: const Icon(Icons.percent),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    onChanged: (value) {
+                      double discount = double.tryParse(value) ?? 0.0;
+                      if (discount >= 0 && discount <= 100) {
+                        setState(() {
+                          discountedPrice = price - (price * (discount / 100));
+                        });
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "Discounted Price: ₹${discountedPrice.toStringAsFixed(2)}",
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Cancel"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    double discount =
+                        double.tryParse(discountController.text) ?? 0.0;
+                    if (discount < 0 || discount > 100) {
+                      showFlushbar(
+                        context: context,
+                        color: Colors.red,
+                        icon: Icons.error_outline,
+                        message: 'Enter a valid discount percentage (0-100%)',
+                      );
+                    } else {
+                      // Save discount in provider
+                      productProvider.tcDiscount.text = discountController.text;
+                      productProvider.discountedPrice = discountedPrice;
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text("Apply"),
+                ),
+              ],
+            );
+          },
+        );
       },
     );
   }

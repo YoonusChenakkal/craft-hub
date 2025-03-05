@@ -4,22 +4,8 @@ import 'package:crafti_hub/user%20side/screens/category/category_products_page.d
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CategoriesPage extends StatefulWidget {
+class CategoriesPage extends StatelessWidget {
   const CategoriesPage({super.key});
-
-  @override
-  State<CategoriesPage> createState() => _CategoriesPageState();
-}
-
-class _CategoriesPageState extends State<CategoriesPage> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    final categoriesprovider =
-        Provider.of<CategoriesProvider>(context, listen: false);
-    categoriesprovider.fetchCategories(context);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,31 +17,26 @@ class _CategoriesPageState extends State<CategoriesPage> {
       body: ListView.builder(
         itemCount: categories.length,
         itemBuilder: (context, index) {
-          return Card(
-            color: const Color.fromARGB(255, 248, 248, 248),
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: ListTile(
-              onTap: () {
-                Navigator.push(
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CategoryProductsPage(
-                        categoryName: categories[index].categoryName),
-                  ),
-                );
-              },
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.network(
-                  categories[index].categoryImage,
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
+                    builder: (context) =>
+                        CategoryProductsPage(category: categories[index]),
+                  ));
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(13),
+                child: Image.asset(
+                  categories[index].image,
+                  width: MediaQuery.of(context).size.width,
+                  height: 200,
+                  fit: BoxFit.fill,
                 ),
               ),
-              title: Text(categories[index].categoryName,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold)),
             ),
           );
         },

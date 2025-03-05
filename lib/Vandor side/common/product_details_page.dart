@@ -176,7 +176,7 @@ class VendorProductDetailPage extends StatelessWidget {
                         arguments: product);
                   },
                   buttonName: 'Edit Product',
-                  color: Colors.cyan))
+                  color: Colors.brown))
         ],
       ),
     );

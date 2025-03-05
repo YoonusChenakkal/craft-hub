@@ -84,7 +84,7 @@ class LoginPage extends StatelessWidget {
                   }
                 },
                 buttonName: 'Login',
-                color: Colors.cyan),
+                color: Colors.brown),
             SizedBox(
               height: 1.h,
             ),
@@ -101,7 +101,7 @@ class LoginPage extends StatelessWidget {
                     },
                     child: Text(
                       'Register',
-                      style: TextStyle(color: Colors.cyan),
+                      style: TextStyle(color: Colors.brown),
                     ))
               ],
             )

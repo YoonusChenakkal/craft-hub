@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-customAppBar({required title}) {
+customAppBar({required title, leading = true}) {
   return AppBar(
     backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
     title: Text(title),
     toolbarHeight: 9.h,
+    automaticallyImplyLeading: leading,
   );
 }
 
@@ -21,7 +22,7 @@ homeAppBar(String userName) {
           'Hello, $userName',
           style: TextStyle(
             fontSize: 20,
-            color: Colors.cyan,
+            color: Colors.brown,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -41,7 +42,7 @@ homeAppBar(String userName) {
         child: Container(
           padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.cyan,
+            color: Colors.brown,
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(

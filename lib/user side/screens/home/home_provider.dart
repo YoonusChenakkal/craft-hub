@@ -10,6 +10,8 @@ class HomeProvider extends ChangeNotifier {
   List<ProductModel> popularProducts = [];
   List<ProductModel> offerProducts = [];
   List<ProductModel> allProducts = [];
+  List<ProductModel> ProductsByCategory = [];
+
   List<ProductBannerModel> promoBanners = [];
   List<CarouselItem> carousels = [];
   String _searchQuery = '';
@@ -20,6 +22,19 @@ class HomeProvider extends ChangeNotifier {
       .where((product) =>
           product.vendorName.toLowerCase().contains(_searchQuery.toLowerCase()))
       .toList();
+
+  // Inside HomeProvider
+  void getProductsofSubcategory(String? categoryName, String? subCategoryname) {
+    print(categoryName);
+    print(subCategoryname);
+
+    ProductsByCategory = allProducts
+        .where((product) =>
+            product.displaycategoryname == categoryName &&
+            product.subcategory == subCategoryname)
+        .toList();
+    notifyListeners(); // Trigger UI update
+  }
 
   set isLoading(value) {
     _isLoading = value;

@@ -89,7 +89,7 @@ class _SplashScreenState extends State<SplashScreen>
                       style: GoogleFonts.novaSquare(
                         fontSize: 26.sp,
                         fontWeight: FontWeight.w700,
-                        color: Colors.cyan,
+                        color: Colors.brown,
                       ),
                     ),
                   ],

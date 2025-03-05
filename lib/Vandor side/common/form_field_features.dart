@@ -20,7 +20,7 @@ InputDecoration textFormFieldDecoration({
       hintText: hinttext,
       prefixIcon: Icon(
         prefixIcon,
-        color: Colors.cyan[700],
+        color: Colors.brown[700],
       ),
       contentPadding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 16.0),
       // Default border (without focus)
@@ -37,7 +37,7 @@ InputDecoration textFormFieldDecoration({
 
       // Border when field is focused
       focusedBorder: _outlinedBorder(
-        Colors.cyan, // Change to desired focus color
+        Colors.brown, // Change to desired focus color
       ),
 
       // Border when there is an error
