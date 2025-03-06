@@ -92,7 +92,7 @@ class LoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Don't have an Vendor account?",
+                  "Don't have an account?",
                 ),
                 TextButton(
                     onPressed: () {

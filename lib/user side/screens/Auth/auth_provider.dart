@@ -94,7 +94,7 @@ class AuthProvider extends ChangeNotifier {
         context: context,
         color: Colors.green,
         icon: Icons.check,
-        message: 'User Registration Successful ,Login to continue',
+        message: 'User Registration Successful',
       );
     } catch (e) {
       // Display the parsed error message

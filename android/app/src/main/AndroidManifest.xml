@@ -2,7 +2,7 @@
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="crafti_hub"
+        android:label="Crafti Hub"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
