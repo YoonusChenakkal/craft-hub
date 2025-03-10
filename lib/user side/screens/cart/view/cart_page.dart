@@ -1,5 +1,6 @@
 import 'package:crafti_hub/user%20side/common/button.dart';
 import 'package:crafti_hub/user%20side/common/custom_app_bar.dart';
+import 'package:crafti_hub/user%20side/common/flush_bar.dart';
 import 'package:crafti_hub/user%20side/screens/cart/cart_model.dart';
 import 'package:crafti_hub/user%20side/screens/cart/view_model/cart_provider.dart';
 import 'package:crafti_hub/user%20side/screens/profile/profile_provider.dart';
@@ -26,6 +27,8 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
+
     return Scaffold(
       appBar: customAppBar(title: 'Your Cart'),
       body: Column(
@@ -53,7 +56,7 @@ class _CartPageState extends State<CartPage> {
                         },
                       ),
                     ),
-                    _buildCheckOutSection(context, cart),
+                    _buildCheckOutSection(context, cart, profileProvider),
                   ],
                 );
               },
@@ -114,7 +117,8 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Widget _buildCheckOutSection(BuildContext context, CartProvider cart) {
+  Widget _buildCheckOutSection(BuildContext context, CartProvider cart,
+      ProfileProvider profileProvider) {
     String selectedPayment = 'Cash on Delivery'; // Default payment method
 
     return Container(
@@ -197,6 +201,21 @@ class _CartPageState extends State<CartPage> {
                       SnackBar(
                         content:
                             Text('Online Payment is currently unavailable.'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  } else if (profileProvider.user == null) {
+                    showFlushbar(
+                        context: context,
+                        color: Colors.red,
+                        icon: Icons.error,
+                        message: 'Please Log In');
+                  } else if (profileProvider.user!.addresses.isEmpty ||
+                      profileProvider.user!.addresses == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content:
+                            Text('No Address Found. Add Address From Profile'),
                         backgroundColor: Colors.red,
                       ),
                     );

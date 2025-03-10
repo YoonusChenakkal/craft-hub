@@ -67,19 +67,16 @@ class _VendorHomePageState extends State<VendorHomePage> {
                         ),
                   ),
                   TextButton(
-                    onPressed: () => Navigator.pushNamed(context, '/orders'),
-                    child: TextButton(
-                      child: Text("View All",
-                          style: TextStyle(
-                            color: Colors.brown,
-                          )),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OrdersPage()));
-                      },
-                    ),
+                    child: Text("View All",
+                        style: TextStyle(
+                          color: Colors.brown,
+                        )),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OrdersPage()));
+                    },
                   ),
                 ],
               ),
@@ -98,12 +95,10 @@ class _VendorHomePageState extends State<VendorHomePage> {
                             ? 2
                             : orders.length, // Show last 2 orders
                         itemBuilder: (context, index) {
-                          final lastIndex =
-                              orders.length - 2 + index; // Get last two orders
                           return Row(
                             children: [
                               OrderCard(
-                                order: orders[lastIndex],
+                                order: orders[index],
                               ),
                               SizedBox(
                                 width: 10,
@@ -145,7 +140,8 @@ class _VendorHomePageState extends State<VendorHomePage> {
           children: [
             Icon(Icons.verified_user,
                 size: 30,
-                color: user.isApproved ? Colors.brown[700] : Colors.yellow[700]),
+                color:
+                    user.isApproved ? Colors.brown[700] : Colors.yellow[700]),
             SizedBox(width: 16),
             Expanded(
               child: Column(

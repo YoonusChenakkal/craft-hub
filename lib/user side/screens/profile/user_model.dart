@@ -52,6 +52,8 @@ class UserAddress {
   final int id;
   final String addressLine1;
   final String addressLine2;
+  final String phone;
+  final String whatsapp;
   final String city;
   final String state;
   final String country;
@@ -68,6 +70,8 @@ class UserAddress {
     required this.state,
     required this.country,
     required this.pincode,
+    required this.phone,
+    required this.whatsapp,
     required this.isPrimary,
     required this.createdAt,
     required this.updatedAt,
@@ -79,6 +83,8 @@ class UserAddress {
       id: json['id'],
       addressLine1: json['address_line1'],
       addressLine2: json['address_line2'],
+      phone: json['mobile_number'],
+      whatsapp: json['whatsapp_number'],
       city: json['city'],
       state: json['state'],
       country: json['country'],
@@ -95,6 +101,8 @@ class UserAddress {
       'id': id,
       'address_line1': addressLine1,
       'address_line2': addressLine2,
+      'mobile_number': phone,
+      'whatsapp_number': whatsapp,
       'city': city,
       'state': state,
       'country': country,

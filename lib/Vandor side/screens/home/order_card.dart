@@ -34,32 +34,29 @@ class OrderCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
-                child: Text(
-                  order.orderIds.toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: order.status.trim() == "Delivered"
-                      ? Colors.green[50]
-                      : Colors.orange[50],
+                  color: order.status.trim() == "REJECTED"
+                      ? Colors.red[50]
+                      : order.status.trim() == "DELIVERED" ||
+                              order.status.trim() == "CONFIRMED" ||
+                              order.status.trim() == "OUT FOR DELIVERY"
+                          ? Colors.green[50]
+                          : Colors.orange[50],
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   order.status.trim(),
                   style: TextStyle(
-                    fontSize: 15,
                     fontWeight: FontWeight.bold,
-                    color: order.status.trim() == "Delivered"
-                        ? Colors.green
-                        : Colors.orange,
+                    color: order.status.trim() == "REJECTED"
+                        ? Colors.red
+                        : order.status.trim() == "DELIVERED" ||
+                                order.status.trim() == "CONFIRMED" ||
+                                order.status.trim() == "OUT FOR DELIVERY"
+                            ? Colors.green
+                            : Colors.orange,
                   ),
                 ),
               ),
@@ -85,7 +82,7 @@ class OrderCard extends StatelessWidget {
                 "₹${order.totalPrice.toStringAsFixed(2)}",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.brown,
+                  color: Colors.green,
                 ),
               ),
             ],

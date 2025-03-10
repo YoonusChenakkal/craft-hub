@@ -78,9 +78,12 @@ class _OrderPageState extends State<OrderPage> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 14, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: order.status == 'CONFIRMED'
-                                      ? Colors.green.shade100
-                                      : Colors.red.shade100,
+                                  color: order.status == 'REJECTED'
+                                      ? Colors.red.shade100
+                                      : order.status ==
+                                              "WAITING FOR CONFIRMATION"
+                                          ? Colors.orange.shade100
+                                          : Colors.green.shade100,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
@@ -88,9 +91,12 @@ class _OrderPageState extends State<OrderPage> {
                                   style: TextStyle(
                                     overflow: TextOverflow.clip,
                                     fontWeight: FontWeight.bold,
-                                    color: order.status == 'CONFIRMED'
-                                        ? Colors.green.shade800
-                                        : Colors.red.shade800,
+                                    color: order.status == 'REJECTED'
+                                        ? Colors.red.shade800
+                                        : order.status ==
+                                                "WAITING FOR CONFIRMATION"
+                                            ? Colors.orange.shade800
+                                            : Colors.green.shade800,
                                   ),
                                 ),
                               ),

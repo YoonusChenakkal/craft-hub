@@ -37,4 +37,22 @@ class VendorOrderProvider extends ChangeNotifier {
       isLoading = false;
     }
   }
+
+  Future changeOrderStatus(orderId, data) async {
+    isLoading = true;
+    notifyListeners(); // Notify UI that loading has started
+
+    try {
+      // changeOrderStatus data from the repository
+      await _orderRepository.changeOrderStatus(orderId, data);
+
+      fetchOrders();
+
+      notifyListeners();
+    } catch (e) {
+      print('Error changeOrderStatus : $e');
+    } finally {
+      isLoading = false;
+    }
+  }
 }

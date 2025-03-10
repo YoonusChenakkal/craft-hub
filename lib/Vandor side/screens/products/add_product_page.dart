@@ -165,16 +165,6 @@ class VendorAddProductPage extends StatelessWidget {
                             icon: Icons.category_rounded,
                             message: 'Please select Category and Sub Category',
                           );
-                        } else if (int.parse(productProvider.tcPrice.text) -
-                                int.parse(productProvider.tcDiscount.text) <=
-                            0) {
-                          showFlushbar(
-                            context: context,
-                            color: Colors.red,
-                            icon: Icons.error_outline,
-                            message:
-                                'You can not give discount more than price',
-                          );
                         } else {
                           productProvider.addProduct(context);
                         }

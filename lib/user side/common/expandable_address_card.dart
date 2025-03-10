@@ -43,6 +43,8 @@ class SavedAddressSection extends StatelessWidget {
                         label: 'Address', value: userAddress[0].addressLine1),
                     tableRow(label: 'Area', value: userAddress[0].addressLine2),
                     tableRow(label: 'City', value: userAddress[0].city),
+                    tableRow(label: 'Mobile', value: userAddress[0].phone),
+                    tableRow(label: 'Whatsapp', value: userAddress[0].whatsapp),
                     tableRow(label: 'State', value: userAddress[0].state),
                     tableRow(label: 'Pincode', value: userAddress[0].pincode),
                   ],
@@ -87,6 +89,9 @@ class SavedAddressSection extends StatelessWidget {
     final tcCity = TextEditingController(text: addressData?.city ?? '');
     final tcState = TextEditingController(text: addressData?.state ?? '');
     final tcPincode = TextEditingController(text: addressData?.pincode ?? '');
+    final tcPhone = TextEditingController(text: addressData?.phone ?? '');
+
+    final tcWhatsapp = TextEditingController(text: addressData?.whatsapp ?? '');
 
     showDialog(
       context: context,
@@ -103,6 +108,24 @@ class SavedAddressSection extends StatelessWidget {
               TextFormField(
                 controller: tcArea,
                 decoration: const InputDecoration(labelText: 'Area'),
+              ),
+              TextFormField(
+                controller: tcPhone,
+                decoration: const InputDecoration(labelText: 'Mobile Number'),
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(10),
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                keyboardType: TextInputType.number,
+              ),
+              TextFormField(
+                controller: tcWhatsapp,
+                decoration: const InputDecoration(labelText: 'Whatsapp Number'),
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(10),
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
               ),
               TextFormField(
                 controller: tcCity,
@@ -145,6 +168,14 @@ class SavedAddressSection extends StatelessWidget {
                     icon: Icons.error,
                     context: context);
                 return;
+              } else if (tcWhatsapp.text.length != 10 ||
+                  tcPhone.text.length != 10) {
+                showFlushbar(
+                    message: 'Number Must be 10 digit',
+                    color: Colors.red,
+                    icon: Icons.error,
+                    context: context);
+                return;
               }
 
               final data = {
@@ -154,7 +185,9 @@ class SavedAddressSection extends StatelessWidget {
                 "pincode": tcPincode.text,
                 "city": tcCity.text,
                 "country": "India",
-                "address_line2": tcArea.text
+                "address_line2": tcArea.text,
+                "mobile_number": tcPhone.text,
+                "whatsapp_number": tcWhatsapp.text,
               };
 
               if (isEdit) {
