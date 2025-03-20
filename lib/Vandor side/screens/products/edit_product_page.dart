@@ -169,7 +169,7 @@ class _VendorEditProductPageState extends State<VendorEditProductPage> {
                       }
                     },
                     buttonName: 'Update Product',
-                    color: Colors.brown,
+                    color: Color.fromARGB(255, 129, 63, 42),
                   ),
                 ],
               ),

@@ -268,7 +268,7 @@ class OrdersPage extends StatelessWidget {
                                     value: status,
                                     child: Text(
                                       status,
-                                      style: TextStyle(color: Colors.brown),
+                                      style: TextStyle(color: Color.fromARGB(255, 129, 63, 42),),
                                     ),
                                   );
                                 }).toList(),

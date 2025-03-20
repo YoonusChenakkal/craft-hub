@@ -14,7 +14,7 @@ class PersonalInfoSetcion extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<ProfileProvider>(context).user;
     return CustomExpansionTile(
-        leading: const Icon(Icons.person, color: Colors.brown),
+        leading: const Icon(Icons.person, color: Color.fromARGB(255, 129, 63, 42),),
         title: 'Personal Info',
         children: [
           Padding(
@@ -36,7 +36,7 @@ class PersonalInfoSetcion extends StatelessWidget {
             customButton(
               isLoading: false,
               buttonName: 'Edit Info',
-              color: Colors.brown,
+              color: Color.fromARGB(255, 129, 63, 42),
               onPressed: () {
                 if (user != null) _showEditPersonalInfoDialog(context, user);
               },

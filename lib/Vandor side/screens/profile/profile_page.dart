@@ -79,7 +79,7 @@ class VendorProfilePage extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.brown,
+                        color: Color.fromARGB(255, 129, 63, 42),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
@@ -112,7 +112,7 @@ class VendorProfilePage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Icon(Icons.edit, color: Colors.brown),
+                    Icon(Icons.edit, color: Color.fromARGB(255, 129, 63, 42),),
                     TextButton(
                       onPressed: () {
                         Navigator.push(context,
@@ -124,7 +124,7 @@ class VendorProfilePage extends StatelessWidget {
                       child: Text(
                         'Edit Profile',
                         style: TextStyle(
-                            color: Colors.brown,
+                            color: Color.fromARGB(255, 129, 63, 42),
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
                       ),
@@ -187,7 +187,7 @@ class VendorProfilePage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Icon(icon, color: Colors.brown, size: 22),
+          Icon(icon, color: Color.fromARGB(255, 129, 63, 42), size: 22),
           SizedBox(width: 12),
           Text(
             label,

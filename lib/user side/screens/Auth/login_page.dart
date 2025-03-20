@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   },
                   buttonName: 'Login',
-                  color: Colors.brown),
+                  color: Color.fromARGB(255, 129, 63, 42),),
               SizedBox(
                 height: 1.h,
               ),
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: Text(
                         'Register',
-                        style: TextStyle(color: Colors.brown),
+                        style: TextStyle(color: Color.fromARGB(255, 129, 63, 42),),
                       ))
                 ],
               )
