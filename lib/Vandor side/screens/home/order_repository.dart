@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 
+import '../../../user side/const/urls.dart';
+import '../../const/urls.dart';
+
 class OrderRepository {
   final Dio dio = Dio();
 
@@ -8,7 +11,7 @@ class OrderRepository {
 
     try {
       Response response = await dio.get(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/orders/vendor/$userId/',
+        '${baseUrl2}productsapp/orders/vendor/$userId/',
       );
 
       // Success case
@@ -42,7 +45,7 @@ class OrderRepository {
     try {
       final formData = FormData.fromMap(data);
       Response response = await dio.patch(
-          'https://purpleecommerce.pythonanywhere.com/productsapp/orders/${orderId}/',
+          '${baseUrl1}productsapp/orders/${orderId}/',
           data: formData);
 
       // Success case
