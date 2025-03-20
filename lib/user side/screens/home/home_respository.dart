@@ -9,7 +9,7 @@ class HomeRespository {
   Future fetchPopularProducts() async {
     try {
       Response response = await dio.get(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/popular/products/',
+        '${baseUrl1}productsapp/popular/products/',
       );
 
       // Success case
@@ -43,7 +43,7 @@ class HomeRespository {
   Future fetchOfferProducts() async {
     try {
       Response response = await dio.get(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/offer/products/',
+        '${baseUrl1}productsapp/offer/products/',
       );
 
       // Success case
@@ -76,7 +76,7 @@ class HomeRespository {
   Future fetchAllProducts() async {
     try {
       Response response = await dio.get(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/product/list/',
+        '${baseUrl1}productsapp/product/list/',
       );
 
       // Success case
@@ -110,7 +110,7 @@ class HomeRespository {
   Future fetchPromoBanners() async {
     try {
       Response response = await dio.get(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/product/banner/image/list/',
+        '${baseUrl1}productsapp/product/banner/image/list/',
       );
 
       // Success case
@@ -182,7 +182,7 @@ class HomeRespository {
       };
 
       Response response = await dio.post(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/product-reviews/',
+        '${baseUrl1}productsapp/product-reviews/',
         data: data,
       );
 

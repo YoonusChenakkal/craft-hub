@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 
+import '../../../const/urls.dart';
+
 class CartRepository {
   final Dio dio = Dio();
 
@@ -9,7 +11,7 @@ class CartRepository {
 
     try {
       Response response = await dio.get(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/cart/$userId/',
+        '${baseUrl1}productsapp/cart/$userId/',
       );
 
       // Success case
@@ -43,7 +45,7 @@ class CartRepository {
     try {
       SVProgressHUD.show();
       Response response = await dio.post(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/cart/add/$userId/$productId/',
+        '${baseUrl1}productsapp/cart/add/$userId/$productId/',
         data: body,
       );
 
@@ -91,7 +93,7 @@ class CartRepository {
       SVProgressHUD.show();
 
       Response response = await dio.delete(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/cart/delete/$cartItemId/',
+        '${baseUrl1}productsapp/cart/delete/$cartItemId/',
       );
 
       // Success case
@@ -137,7 +139,7 @@ class CartRepository {
 
     try {
       Response response = await dio.post(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/checkout/',
+        '${baseUrl1}productsapp/checkout/',
         data: body,
       );
 
