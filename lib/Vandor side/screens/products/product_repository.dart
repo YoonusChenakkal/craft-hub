@@ -34,7 +34,7 @@ class ProductRepository {
   Future fetchProducts(userId) async {
     try {
       Response response = await dio.get(
-          'https://purpleecommerce.pythonanywhere.com/productsapp/vendors/$userId/products');
+          '${baseUrl2}productsapp/vendors/$userId/products');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print(response.data);
@@ -110,7 +110,7 @@ class ProductRepository {
       print("Trending One: false");
 
       Response response = await dio.post(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/product/',
+        '${baseUrl2}productsapp/product/',
         data: formData,
       );
 
@@ -168,7 +168,7 @@ class ProductRepository {
       print(categoryname);
       // Send PATCH request
       Response response = await dio.patch(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/product/$productId/',
+        '${baseUrl2}productsapp/product/$productId/',
         data: formData,
       );
 
@@ -196,7 +196,7 @@ class ProductRepository {
   Future<void> deleteProduct(int productId) async {
     try {
       Response response = await dio.delete(
-          'https://purpleecommerce.pythonanywhere.com/productsapp/product/$productId/');
+          '${baseUrl2}productsapp/product/$productId/');
 
       if (response.statusCode == 200 ||
           response.statusCode == 201 ||
