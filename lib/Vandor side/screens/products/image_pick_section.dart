@@ -32,7 +32,7 @@ class ImagePickSection extends StatelessWidget {
                                   child: Icon(
                                     Icons.image,
                                     size: 70,
-                                    color: Color.fromARGB(255, 129, 63, 42),
+                                    color: Colors.white,
                                   ),
                                 )
                               : Wrap(

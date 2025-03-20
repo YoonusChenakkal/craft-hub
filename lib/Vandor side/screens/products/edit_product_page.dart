@@ -5,7 +5,7 @@ import 'package:crafti_hub/Vandor%20side/common/form_field_features.dart';
 import 'package:crafti_hub/Vandor%20side/screens/products/category_dialog_box.dart';
 import 'package:crafti_hub/Vandor%20side/screens/products/offer_dialog_box.dart';
 import 'package:crafti_hub/Vandor%20side/screens/products/product_Provider.dart';
-import 'package:crafti_hub/Vandor%20side/screens/products/product_model.dart';
+import 'package:crafti_hub/user%20side/screens/products/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -40,9 +40,9 @@ class _VendorEditProductPageState extends State<VendorEditProductPage> {
       productProvider.tcProductDescription.text = product.productDescription;
       productProvider.tcPrice.text = product.price.toString();
       productProvider.isOfferProduct = product.isOfferProduct;
-      productProvider.isPopular = product.isPopularProduct;
-      productProvider.isNewArrival = product.isNewArrival;
-      productProvider.isTrending = product.isTrending;
+      productProvider.isPopular = product.popularProducts;
+      productProvider.isNewArrival = product.newArrival;
+      productProvider.isTrending = product.trendingOne;
     });
   }
 
@@ -87,7 +87,7 @@ class _VendorEditProductPageState extends State<VendorEditProductPage> {
                   // Product Description
                   TextFormField(
                     controller: productProvider.tcProductDescription,
-                    validator: emptyCheckValidator,
+                    validator: emptyCheckValidator, 
                     decoration: textFormFieldDecoration(
                       hinttext: 'Product Description',
                       prefixIcon: Icons.description_outlined,

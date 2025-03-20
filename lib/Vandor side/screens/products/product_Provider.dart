@@ -207,7 +207,6 @@ class VendorProductProvider extends ChangeNotifier {
   ProductRepository _productRepo = ProductRepository();
 
   fetchProducts(BuildContext context) async {
-    SVProgressHUD.show();
     final userId = await LocalStorage.getUser();
 
     try {
@@ -223,9 +222,7 @@ class VendorProductProvider extends ChangeNotifier {
       // Display the parsed error message
 
       print("❌ Fetching Products failed: $e");
-    } finally {
-      SVProgressHUD.dismiss();
-    }
+    } finally {}
   }
 
   Future<void> addProduct(BuildContext context) async {
@@ -240,8 +237,6 @@ class VendorProductProvider extends ChangeNotifier {
           icon: Icons.error,
           message: 'Please log in again.',
         );
-        isLoading = false;
-        notifyListeners();
         return;
       }
       // Call API to add product
@@ -340,7 +335,6 @@ class VendorProductProvider extends ChangeNotifier {
 
   Future<void> deleteProduct(int productId, BuildContext context) async {
     print('Deleting Product: $productId');
-    isLoading = true;
     SVProgressHUD.show();
     notifyListeners();
 
@@ -367,9 +361,7 @@ class VendorProductProvider extends ChangeNotifier {
       );
       print("❌ Product Deleting failed: $e");
     } finally {
-      isLoading = false;
       SVProgressHUD.dismiss();
-      notifyListeners();
     }
   }
 
