@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
+
+import '../../../const/urls.dart';
 
 class CartRepository {
   final Dio dio = Dio();
@@ -8,7 +11,7 @@ class CartRepository {
 
     try {
       Response response = await dio.get(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/cart/$userId/',
+        '${baseUrl1}productsapp/cart/$userId/',
       );
 
       // Success case
@@ -40,22 +43,31 @@ class CartRepository {
     // Fetch cart
 
     try {
+      SVProgressHUD.show();
       Response response = await dio.post(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/cart/add/$userId/$productId/',
+        '${baseUrl1}productsapp/cart/add/$userId/$productId/',
         data: body,
       );
 
       // Success case
       if (response.statusCode == 200 || response.statusCode == 201) {
+        SVProgressHUD.dismiss();
+
         print(response.data);
         return response;
       } else {
+        SVProgressHUD.dismiss();
+
         // This block is not needed if using default validateStatus
         throw Exception('Unexpected status code: ${response.statusCode}');
       }
     } on DioException catch (e) {
+      SVProgressHUD.dismiss();
+
       // Handle 400 errors and other Dio exceptions
       if (e.response != null) {
+        SVProgressHUD.dismiss();
+
         String errorMessage = '';
         errorMessage = e.response!.data.entries.first.value;
         print('---------------->${errorMessage}');
@@ -63,9 +75,13 @@ class CartRepository {
         throw Exception(
             errorMessage.isNotEmpty ? errorMessage : 'add to Cart failed');
       } else {
+        SVProgressHUD.dismiss();
+
         throw Exception('Network error: ${e.message}');
       }
     } catch (e) {
+      SVProgressHUD.dismiss();
+
       throw Exception('Unexpected error: $e');
     }
   }
@@ -74,21 +90,31 @@ class CartRepository {
     // Fetch cart
 
     try {
+      SVProgressHUD.show();
+
       Response response = await dio.delete(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/cart/delete/$cartItemId/',
+        '${baseUrl1}productsapp/cart/delete/$cartItemId/',
       );
 
       // Success case
       if (response.statusCode == 200 || response.statusCode == 201) {
         print(response.data);
+        SVProgressHUD.dismiss();
+
         return response;
       } else {
+        SVProgressHUD.dismiss();
+
         // This block is not needed if using default validateStatus
         throw Exception('Unexpected status code: ${response.statusCode}');
       }
     } on DioException catch (e) {
+      SVProgressHUD.dismiss();
+
       // Handle 400 errors and other Dio exceptions
       if (e.response != null) {
+        SVProgressHUD.dismiss();
+
         String errorMessage = '';
         errorMessage = e.response!.data.entries.first.value;
         print('---------------->${errorMessage}');
@@ -96,9 +122,13 @@ class CartRepository {
         throw Exception(
             errorMessage.isNotEmpty ? errorMessage : 'delete Cart failed');
       } else {
+        SVProgressHUD.dismiss();
+
         throw Exception('Network error: ${e.message}');
       }
     } catch (e) {
+      SVProgressHUD.dismiss();
+
       throw Exception('Unexpected error: $e');
     }
   }
@@ -109,7 +139,7 @@ class CartRepository {
 
     try {
       Response response = await dio.post(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/checkout/',
+        '${baseUrl1}productsapp/checkout/',
         data: body,
       );
 

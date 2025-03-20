@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 
+import '../../const/urls.dart';
+
 class OrderRepository {
   final Dio dio = Dio();
 
@@ -8,7 +10,7 @@ class OrderRepository {
 
     try {
       Response response = await dio.get(
-        'https://purpleecommerce.pythonanywhere.com/productsapp/orders/user/$userId/',
+        '${baseUrl1}productsapp/orders/user/$userId/',
       );
 
       // Success case

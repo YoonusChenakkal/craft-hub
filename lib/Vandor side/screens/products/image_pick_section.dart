@@ -26,13 +26,13 @@ class ImagePickSection extends StatelessWidget {
                           provider.selectedImages.isEmpty
                               ? Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.brown[50],
+                                    color: Color.fromARGB(255, 129, 63, 42),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Icon(
                                     Icons.image,
                                     size: 70,
-                                    color: Colors.brown,
+                                    color: Color.fromARGB(255, 129, 63, 42),
                                   ),
                                 )
                               : Wrap(
@@ -86,7 +86,7 @@ class ImagePickSection extends StatelessWidget {
                             child: Icon(
                               Icons.add,
                               size: 50,
-                              color: Colors.brown,
+                              color: Color.fromARGB(255, 129, 63, 42),
                             ),
                           ),
                         ],

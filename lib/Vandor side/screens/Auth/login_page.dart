@@ -60,7 +60,7 @@ class VendorLoginPage extends StatelessWidget {
                       if (authProvider.tcLoginEmail.text.isEmpty) {
                         showFlushbar(
                           context: context,
-                          color: Colors.brown,
+                          color: Color.fromARGB(255, 129, 63, 42),
                           icon: Icons.error,
                           message: 'Enter email',
                         );
@@ -89,7 +89,7 @@ class VendorLoginPage extends StatelessWidget {
                     }
                   },
                   buttonName: 'Login',
-                  color: Colors.brown),
+                  color: Color.fromARGB(255, 129, 63, 42),),
               SizedBox(
                 height: 1.h,
               ),
@@ -107,7 +107,7 @@ class VendorLoginPage extends StatelessWidget {
                       },
                       child: Text(
                         'Register',
-                        style: TextStyle(color: Colors.brown),
+                        style: TextStyle(color: Color.fromARGB(255, 129, 63, 42),),
                       ))
                 ],
               )
@@ -120,7 +120,7 @@ class VendorLoginPage extends StatelessWidget {
 
   logo() {
     return CircleAvatar(
-      backgroundColor: Colors.brown,
+      backgroundColor: Color.fromARGB(255, 129, 63, 42),
       radius: 16.w,
       child: FittedBox(
         child: Text(

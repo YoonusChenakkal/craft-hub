@@ -22,7 +22,7 @@ homeAppBar(String userName) {
           'Hello, $userName',
           style: TextStyle(
             fontSize: 20,
-            color: Colors.brown,
+            color: Color.fromARGB(255, 129, 63, 42),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -42,7 +42,7 @@ homeAppBar(String userName) {
         child: Container(
           padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.brown,
+            color: Color.fromARGB(255, 129, 63, 42),
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(

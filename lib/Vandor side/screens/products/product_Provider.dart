@@ -314,7 +314,7 @@ class VendorProductProvider extends ChangeNotifier {
       Navigator.pop(context);
       await showFlushbar(
         context: context,
-        color: Colors.brown,
+        color: Color.fromARGB(255, 129, 63, 42),
         icon: Icons.check_circle,
         message: 'Product Updated successfully!',
       );

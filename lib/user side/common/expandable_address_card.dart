@@ -26,7 +26,7 @@ class SavedAddressSection extends StatelessWidget {
 
     return CustomExpansionTile(
       initiallyExpanded: true,
-      leading: const Icon(Icons.location_on, color: Colors.brown),
+      leading: const Icon(Icons.location_on, color: Color.fromARGB(255, 129, 63, 42),),
       title: 'Address',
       children: [
         Padding(
@@ -53,7 +53,7 @@ class SavedAddressSection extends StatelessWidget {
         userAddress == null || userAddress.isEmpty
             ? customButton(
                 isLoading: false,
-                color: Colors.brown,
+                color: Color.fromARGB(255, 129, 63, 42),
                 buttonName: '+ Address',
                 onPressed: () {
                   _showEditAddressDialog(context, profileProvider,
@@ -61,7 +61,7 @@ class SavedAddressSection extends StatelessWidget {
                 })
             : customButton(
                 isLoading: false,
-                color: Colors.brown,
+                color: Color.fromARGB(255, 129, 63, 42),
                 buttonName: 'Edit Address',
                 onPressed: () {
                   _showEditAddressDialog(context, profileProvider,

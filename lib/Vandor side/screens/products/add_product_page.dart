@@ -171,7 +171,7 @@ class VendorAddProductPage extends StatelessWidget {
                       }
                     },
                     buttonName: 'Add Product',
-                    color: Colors.brown,
+                    color: Color.fromARGB(255, 129, 63, 42),
                   ),
                 ],
               ),

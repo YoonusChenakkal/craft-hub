@@ -42,7 +42,7 @@ class _VendorHomePageState extends State<VendorHomePage> {
           'New Product',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.brown,
+        backgroundColor: Color.fromARGB(255, 129, 63, 42),
         onPressed: () => Navigator.pushNamed(context, '/vendorAddProduct'),
         icon: const Icon(Icons.add, color: Colors.white),
       ),
@@ -69,7 +69,7 @@ class _VendorHomePageState extends State<VendorHomePage> {
                   TextButton(
                     child: Text("View All",
                         style: TextStyle(
-                          color: Colors.brown,
+                          color: Color.fromARGB(255, 129, 63, 42),
                         )),
                     onPressed: () {
                       Navigator.push(
@@ -144,7 +144,7 @@ class _VendorHomePageState extends State<VendorHomePage> {
             Icon(Icons.verified_user,
                 size: 30,
                 color:
-                    user.isApproved ? Colors.brown[700] : Colors.yellow[700]),
+                    user.isApproved ? Color.fromARGB(255, 129, 63, 42) : Colors.yellow[700]),
             SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -155,7 +155,7 @@ class _VendorHomePageState extends State<VendorHomePage> {
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.brown[900]),
+                        color: Color.fromARGB(255, 129, 63, 42),),
                   ),
                   SizedBox(height: 4),
                   user.isApproved
