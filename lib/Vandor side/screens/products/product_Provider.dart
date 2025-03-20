@@ -287,6 +287,7 @@ class VendorProductProvider extends ChangeNotifier {
   }
 
   Future<void> updateProduct(int productId, BuildContext context) async {
+    SVProgressHUD.show();
     isLoading = true;
     notifyListeners();
 
@@ -330,6 +331,7 @@ class VendorProductProvider extends ChangeNotifier {
       print("❌ Product Updating failed: $e");
     } finally {
       isLoading = false;
+      SVProgressHUD.dismiss();
       notifyListeners();
     }
   }
@@ -339,6 +341,7 @@ class VendorProductProvider extends ChangeNotifier {
   Future<void> deleteProduct(int productId, BuildContext context) async {
     print('Deleting Product: $productId');
     isLoading = true;
+    SVProgressHUD.show();
     notifyListeners();
 
     try {
@@ -365,6 +368,7 @@ class VendorProductProvider extends ChangeNotifier {
       print("❌ Product Deleting failed: $e");
     } finally {
       isLoading = false;
+      SVProgressHUD.dismiss();
       notifyListeners();
     }
   }
