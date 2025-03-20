@@ -29,6 +29,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MultiProvider(
       providers: [
