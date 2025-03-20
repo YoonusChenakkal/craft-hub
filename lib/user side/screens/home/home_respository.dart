@@ -1,3 +1,4 @@
+import 'package:crafti_hub/local_storage.dart';
 import 'package:crafti_hub/user%20side/const/urls.dart';
 import 'package:dio/dio.dart';
 
@@ -15,12 +16,11 @@ class HomeRespository {
       if (response.statusCode == 200 || response.statusCode == 201) {
         print(response.data);
         return response;
-      } else {  
+      } else {
         // This block is not needed if using default validateStatus
         throw Exception('Unexpected status code: ${response.statusCode}');
       }
-    } on DioException catch (e) { 
-
+    } on DioException catch (e) {
       // Handle 400 errors and other Dio exceptions
       if (e.response != null) {
         String errorMessage = '';
@@ -162,6 +162,46 @@ class HomeRespository {
 
         throw Exception(
             errorMessage.isNotEmpty ? errorMessage : 'fetch Carousel failed');
+      } else {
+        throw Exception('Network error: ${e.message}');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+  // add review to product
+
+  Future addReviewToProduct(productId, review, rating) async {
+    try {
+      final userId = await LocalStorage.getUser();
+      final data = {
+        'user_id': userId,
+        'rating': rating,
+        'product_id': productId,
+        'review': review
+      };
+
+      Response response = await dio.post(
+        'https://purpleecommerce.pythonanywhere.com/productsapp/product-reviews/',
+        data: data,
+      );
+
+      // Success case
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response;
+      } else {
+        // This block is not needed if using default validateStatus
+        throw Exception('Unexpected status code: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      // Handle 400 errors and other Dio exceptions
+      if (e.response != null) {
+        String errorMessage = '';
+        errorMessage = e.response!.data.entries.first.value;
+        print('---------------->${errorMessage}');
+
+        throw Exception(
+            errorMessage.isNotEmpty ? errorMessage : 'add review failed');
       } else {
         throw Exception('Network error: ${e.message}');
       }

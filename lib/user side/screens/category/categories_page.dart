@@ -1,6 +1,7 @@
 import 'package:crafti_hub/user%20side/common/custom_app_bar.dart';
 import 'package:crafti_hub/user%20side/screens/category/categories_provider.dart';
 import 'package:crafti_hub/user%20side/screens/category/category_products_page.dart';
+import 'package:crafti_hub/user%20side/screens/home/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +11,8 @@ class CategoriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categoriesprovider = Provider.of<CategoriesProvider>(context);
+    final homeProvider = Provider.of<HomeProvider>(context);
+
     final categories = categoriesprovider.categories;
 
     return Scaffold(
@@ -19,12 +22,11 @@ class CategoriesPage extends StatelessWidget {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        CategoryProductsPage(category: categories[index]),
-                  ));
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                homeProvider.getProductsofSubcategory(categories[index].name,
+                    categories[index].subCategories[0].name);
+                return CategoryProductsPage(category: categories[index]);
+              }));
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),

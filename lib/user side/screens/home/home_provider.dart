@@ -11,12 +11,17 @@ class HomeProvider extends ChangeNotifier {
   List<ProductModel> offerProducts = [];
   List<ProductModel> allProducts = [];
   List<ProductModel> ProductsByCategory = [];
-
+  int _selectedSubCategoryIndex = 0;
   List<ProductBannerModel> promoBanners = [];
   List<CarouselItem> carousels = [];
   String _searchQuery = '';
 
   bool get isLoading => _isLoading;
+  int get selectedSubCategoryIndex => _selectedSubCategoryIndex;
+  set selectedSubCategoryIndex(value) {
+    _selectedSubCategoryIndex = value;
+    notifyListeners();
+  }
 
   List<ProductModel> get filteredProducts => allProducts
       .where((product) =>
@@ -181,6 +186,31 @@ class HomeProvider extends ChangeNotifier {
         message: 'Fetching Carousel Failed',
       );
       print("❌ Fetching Carousel failed: $e");
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  // add review to product
+  addReviewToProduct(
+      BuildContext context, int productId, String review, rating) async {
+    isLoading = true;
+
+    try {
+      final response =
+          await _homeRepo.addReviewToProduct(productId, review, rating);
+
+      print('Sucess Add Review');
+      notifyListeners();
+    } on Exception catch (e) {
+      // Display the parsed error message
+      showFlushbar(
+        context: context,
+        color: Colors.red,
+        icon: Icons.error,
+        message: 'Adding Review Failed',
+      );
+      print("❌ Adding Review failed: $e");
     } finally {
       isLoading = false;
     }

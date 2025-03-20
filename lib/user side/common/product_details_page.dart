@@ -1,20 +1,28 @@
 import 'package:crafti_hub/user%20side/common/add_to_cart_sheet.dart';
 import 'package:crafti_hub/user%20side/common/custom_app_bar.dart';
+import 'package:crafti_hub/user%20side/screens/home/home_provider.dart';
 import 'package:crafti_hub/user%20side/screens/products/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ProductDetailPage extends StatelessWidget {
+class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({super.key});
+
+  @override
+  State<ProductDetailPage> createState() => _ProductDetailPageState();
+}
+
+class _ProductDetailPageState extends State<ProductDetailPage> {
+  String _reviewText = '';
+  int _rating = 0;
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments;
-    ProductModel product = args as ProductModel;
+    final ProductModel product = args as ProductModel;
 
     final double savings = product.price - product.offerPrice;
     final bool hasDiscount = product.offerPrice < product.price;
-
-    
 
     return Scaffold(
       appBar: customAppBar(title: 'Product Details'),
@@ -58,7 +66,7 @@ class ProductDetailPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Product Name
+                        // Product Name and Stock Status
                         Row(
                           children: [
                             Text(
@@ -69,21 +77,18 @@ class ProductDetailPage extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(left: 10),
+                              margin: const EdgeInsets.only(left: 10),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 color: Colors.green.withOpacity(0.2),
-                                // : Colors.red.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(4),
                               ),
-                              child: Text(
+                              child: const Text(
                                 'In Stock',
-                                // : 'Out Of Stock',
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.green,
-                                  // : Colors.red,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -163,6 +168,133 @@ class ProductDetailPage extends StatelessWidget {
                             color: Colors.grey.shade600,
                           ),
                         ),
+                        // Reviews Section
+                        const SizedBox(height: 24),
+                        const Text(
+                          'Customer Reviews',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const Divider(),
+                        const SizedBox(height: 8),
+                        // Reviews List
+                        if (product.imageUrls == null &&
+                            product.imageUrls.isEmpty)
+                          ...product.imageUrls!
+                              .map((review) => ReviewItem(review: review))
+                              .toList()
+                        else
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            child: Text(
+                              'No reviews yet. Be the first to review!',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        // Write Review Section
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Write a Review',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        // Rating Stars
+                        Row(
+                          children: List.generate(5, (index) {
+                            return IconButton(
+                              icon: Icon(
+                                index < _rating
+                                    ? Icons.star_rounded
+                                    : Icons.star_outline_rounded,
+                                color: Colors.amber,
+                                size: 32,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _rating = index + 1;
+                                });
+                              },
+                            );
+                          }),
+                        ),
+                        const SizedBox(height: 12),
+                        // Review Text Field
+                        TextField(
+                          decoration: const InputDecoration(
+                            hintText:
+                                'Share your thoughts about the product...',
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          maxLines: 4,
+                          onChanged: (value) =>
+                              setState(() => _reviewText = value),
+                        ),
+                        const SizedBox(height: 16),
+                        // Submit Button
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            icon: const Icon(Icons.send_rounded, size: 20),
+                            label: const Text(
+                              'SUBMIT REVIEW',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.brown,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: () async {
+                              if (_rating == 0) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text('Please select a rating')));
+                                return;
+                              }
+                              if (_reviewText.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text('Please write a review')));
+                                return;
+                              }
+                              try {
+                                final homeProvider = Provider.of<HomeProvider>(
+                                    context,
+                                    listen: false);
+                                await homeProvider.addReviewToProduct(
+                                    context, product.id, _reviewText, _rating);
+                                // Clear form
+                                setState(() {
+                                  _reviewText = '';
+                                  _rating = 0;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Review submitted successfully!')));
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'Failed to submit review: $e')));
+                              }
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -222,6 +354,65 @@ class ProductDetailPage extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       builder: (_) => AddToCartSheet(product: product),
+    );
+  }
+}
+
+class ReviewItem extends StatelessWidget {
+  final review;
+
+  const ReviewItem({super.key, required this.review});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  review.userName,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                const Spacer(),
+                ...List.generate(
+                    5,
+                    (index) => Icon(
+                          index < review.rating
+                              ? Icons.star_rounded
+                              : Icons.star_outline_rounded,
+                          color: Colors.amber,
+                          size: 20,
+                        )),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              review.comment,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              review.date,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey.shade500,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

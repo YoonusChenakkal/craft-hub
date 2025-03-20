@@ -11,35 +11,53 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class VendorEditProductPage extends StatelessWidget {
-  const VendorEditProductPage({
-    super.key,
-  });
+class VendorEditProductPage extends StatefulWidget {
+  const VendorEditProductPage({super.key});
+
+  @override
+  State<VendorEditProductPage> createState() => _VendorEditProductPageState();
+}
+
+class _VendorEditProductPageState extends State<VendorEditProductPage> {
+  late VendorProductProvider productProvider;
+  final _formKey = GlobalKey<FormState>();
+  late ProductModel product; // Store product instance
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Delay execution until after the first frame
+    Future.delayed(Duration.zero, () {
+      final args = ModalRoute.of(context)!.settings.arguments;
+      product = args as ProductModel;
+
+      productProvider =
+          Provider.of<VendorProductProvider>(context, listen: false);
+
+      // Initialize values in provider
+      productProvider.tcProductName.text = product.productName;
+      productProvider.tcProductDescription.text = product.productDescription;
+      productProvider.tcPrice.text = product.price.toString();
+      productProvider.isOfferProduct = product.isOfferProduct;
+      productProvider.isPopular = product.isPopularProduct;
+      productProvider.isNewArrival = product.isNewArrival;
+      productProvider.isTrending = product.isTrending;
+    });
+  }
+
+  String getSelectedOffers(VendorProductProvider productProvider) {
+    List<String> selectedOffers = [];
+    if (productProvider.isOfferProduct) selectedOffers.add('Offer Product');
+    if (productProvider.isPopular) selectedOffers.add('Popular Product');
+    if (productProvider.isNewArrival) selectedOffers.add('New Arrival');
+    if (productProvider.isTrending) selectedOffers.add('Trending Product');
+    return selectedOffers.isNotEmpty ? selectedOffers.join(', ') : 'Select';
+  }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments;
-    ProductModel product = args as ProductModel;
-
-    final _formKey = GlobalKey<FormState>();
-    final productProvider = Provider.of<VendorProductProvider>(context);
-    productProvider.tcProductName.text = product.productName;
-    productProvider.tcProductDescription.text = product.productDescription;
-
-    productProvider.tcPrice.text = product.price.toString();
-    productProvider.isOfferProduct = product.isOfferProduct;
-    productProvider.isPopular = product.isPopularProduct;
-    productProvider.isNewArrival = product.isNewArrival;
-    productProvider.isTrending = product.isTrending;
-
-    String getSelectedOffers(VendorProductProvider productProvider) {
-      List<String> selectedOffers = [];
-      if (productProvider.isOfferProduct) selectedOffers.add('Offer Product');
-      if (productProvider.isPopular) selectedOffers.add('Popular Product');
-      if (productProvider.isNewArrival) selectedOffers.add('New Arrival');
-      if (productProvider.isTrending) selectedOffers.add('Trending Product');
-      return selectedOffers.isNotEmpty ? selectedOffers.join(', ') : 'Select';
-    }
+    productProvider = Provider.of<VendorProductProvider>(context);
 
     return PopScope(
       canPop: true,
@@ -96,14 +114,14 @@ class VendorEditProductPage extends StatelessWidget {
                   // Discount
                   InkWell(
                     onTap: () {
-                      showDiscountDialog(context, productProvider, product);
+                      showDiscountDialog(context, productProvider);
                     },
                     child: TextFormField(
                       enabled: false,
                       controller: productProvider.tcDiscount,
                       decoration: textFormFieldDecoration(
                         hinttext: productProvider.tcDiscount.text.isEmpty
-                            ? '${product.discount.toStringAsFixed(0)}%'
+                            ? 'Enter Discount'
                             : 'Discount: ${productProvider.tcDiscount.text}%',
                         prefixIcon: Icons.currency_exchange_rounded,
                       ),
@@ -114,15 +132,13 @@ class VendorEditProductPage extends StatelessWidget {
 
                   // Select Category
                   InkWell(
-                    onTap: () async {
-                      showCategoryDialog(context);
-                    },
+                    onTap: () => showCategoryDialog(context),
                     child: TextFormField(
                       enabled: false,
                       decoration: textFormFieldDecoration(
                         hinttext: productProvider.selectedCategory == null
-                            ? '${product.categoryDisplayName} - ${product.subcategory}'
-                            : '${productProvider.selectedCategory?.name} - ${productProvider.selectedSubCategory?.name ?? 'select Sub Category'}',
+                            ? 'Select Category'
+                            : '${productProvider.selectedCategory?.name} - ${productProvider.selectedSubCategory?.name ?? 'Select Sub Category'}',
                         prefixIcon: Icons.category_outlined,
                       ),
                     ),
@@ -132,9 +148,7 @@ class VendorEditProductPage extends StatelessWidget {
 
                   // Select Offers
                   InkWell(
-                    onTap: () {
-                      showOfferDialogBox(context);
-                    },
+                    onTap: () => showOfferDialogBox(context),
                     child: TextFormField(
                       enabled: false,
                       decoration: textFormFieldDecoration(
@@ -166,34 +180,30 @@ class VendorEditProductPage extends StatelessWidget {
     );
   }
 
-  showOfferDialogBox(BuildContext context) {
-    return showDialog(
+  void showOfferDialogBox(BuildContext context) {
+    showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return OfferDialogBox();
-      },
+      builder: (context) => OfferDialogBox(),
     );
   }
 
   void showCategoryDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return CategoryDialogBox();
-      },
+      builder: (context) => CategoryDialogBox(),
     );
   }
 
-  void showDiscountDialog(BuildContext context,
-      VendorProductProvider productProvider, ProductModel product) {
+  void showDiscountDialog(
+      BuildContext context, VendorProductProvider productProvider) {
     TextEditingController discountController =
-        TextEditingController(text: product.discount.toStringAsFixed(0));
+        TextEditingController(text: productProvider.tcDiscount.text);
     double price = double.tryParse(productProvider.tcPrice.text) ?? 0.0;
-    double discountedPrice = price; // Local state variable for updating UI
+    double discountedPrice = price;
 
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
@@ -235,21 +245,9 @@ class VendorEditProductPage extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    double discount =
-                        double.tryParse(discountController.text) ?? 0.0;
-                    if (discount < 0 || discount > 100) {
-                      showFlushbar(
-                        context: context,
-                        color: Colors.red,
-                        icon: Icons.error_outline,
-                        message: 'Enter a valid discount percentage (0-100%)',
-                      );
-                    } else {
-                      // Save discount in provider
-                      productProvider.tcDiscount.text = discountController.text;
-                      productProvider.discountedPrice = discountedPrice;
-                      Navigator.pop(context);
-                    }
+                    productProvider.tcDiscount.text = discountController.text;
+                    productProvider.discountedPrice = discountedPrice;
+                    Navigator.pop(context);
                   },
                   child: const Text("Apply"),
                 ),

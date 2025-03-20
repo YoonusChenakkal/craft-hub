@@ -117,7 +117,10 @@ class _VendorHomePageState extends State<VendorHomePage> {
                   _buildStatCard("Total Products",
                       productsProvider.products.length.toString(), Colors.blue),
                   const SizedBox(width: 12),
-                  _buildStatCard("Pending Orders", "0", Colors.orange),
+                  _buildStatCard(
+                      "Pending Orders",
+                      orderProvider.pendingOrders.length.toString(),
+                      Colors.orange),
                 ],
               ),
             ],

@@ -8,6 +8,9 @@ class VendorOrderProvider extends ChangeNotifier {
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
+  List get pendingOrders => orders
+      .where((order) => order.status == "WAITING FOR CONFIRMATION")
+      .toList();
 
   set isLoading(bool value) {
     _isLoading = value;
