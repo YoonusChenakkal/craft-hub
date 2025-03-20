@@ -35,44 +35,54 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             Navigator.pushNamed(context, '/cart');
           }),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (homeProvider.carousels.isNotEmpty) Carousels(),
-            if (homeProvider.popularProducts.isNotEmpty) ...[
-              Padding(
-                padding: const EdgeInsets.only(left: 12),
-                child: Text(
-                  textScaler: TextScaler.noScaling,
-                  'Popular Products',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 20,
-                    color: Colors.black,
+      body: RefreshIndicator(
+        onRefresh: () {
+          homeProvider.fetchOfferProducts(context);
+          homeProvider.fetchPopularProducts(context);
+          homeProvider.fetchPromoBanners(context);
+          homeProvider.fetchCarousel(context);
+          homeProvider.fetchAllProducts(context);
+          return Future.value(true);
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (homeProvider.carousels.isNotEmpty) Carousels(),
+              if (homeProvider.popularProducts.isNotEmpty) ...[
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Text(
+                    textScaler: TextScaler.noScaling,
+                    'Popular Products',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-              ),
-              rowProductSection(homeProvider.popularProducts)
-            ],
-            if (homeProvider.offerProducts.isNotEmpty) ...[
-              Padding(
-                padding: const EdgeInsets.only(left: 12),
-                child: Text(
-                  textScaler: TextScaler.noScaling,
-                  'Offer Products',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 20,
-                    color: Colors.black,
+                rowProductSection(homeProvider.popularProducts)
+              ],
+              if (homeProvider.offerProducts.isNotEmpty) ...[
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Text(
+                    textScaler: TextScaler.noScaling,
+                    'Offer Products',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-              ),
-              rowProductSection(homeProvider.offerProducts)
+                rowProductSection(homeProvider.offerProducts)
+              ],
+              if (homeProvider.promoBanners.isNotEmpty) PromoBanner(),
+              allProductSection(),
             ],
-            if (homeProvider.promoBanners.isNotEmpty) PromoBanner(),
-            allProductSection(),
-          ],
+          ),
         ),
       ),
     );

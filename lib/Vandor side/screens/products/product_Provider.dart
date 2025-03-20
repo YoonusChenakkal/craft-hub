@@ -2,9 +2,10 @@ import 'dart:io';
 import 'package:crafti_hub/Vandor%20side/common/flush_bar.dart';
 import 'package:crafti_hub/local_storage.dart';
 import 'package:crafti_hub/Vandor%20side/screens/products/category_model.dart';
-import 'package:crafti_hub/Vandor%20side/screens/products/product_model.dart';
+import 'package:crafti_hub/user%20side/screens/products/product_model.dart';
 import 'package:crafti_hub/Vandor%20side/screens/products/product_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:image_picker/image_picker.dart';
 
 class VendorProductProvider extends ChangeNotifier {
@@ -206,7 +207,7 @@ class VendorProductProvider extends ChangeNotifier {
   ProductRepository _productRepo = ProductRepository();
 
   fetchProducts(BuildContext context) async {
-    isLoading = true;
+    SVProgressHUD.show();
     final userId = await LocalStorage.getUser();
 
     try {
@@ -223,13 +224,12 @@ class VendorProductProvider extends ChangeNotifier {
 
       print("❌ Fetching Products failed: $e");
     } finally {
-      isLoading = false;
+      SVProgressHUD.dismiss();
     }
   }
 
   Future<void> addProduct(BuildContext context) async {
-    isLoading = true;
-    notifyListeners();
+    SVProgressHUD.show();
 
     try {
       int? userId = await LocalStorage.getUser();
@@ -282,8 +282,7 @@ class VendorProductProvider extends ChangeNotifier {
       );
       print("❌ Product addition failed: $e");
     } finally {
-      isLoading = false;
-      notifyListeners();
+      SVProgressHUD.dismiss();
     }
   }
 
@@ -300,7 +299,7 @@ class VendorProductProvider extends ChangeNotifier {
         productDescription: tcProductDescription.text,
         price: tcPrice.text,
         discount: tcDiscount.text,
-       categoryname: selectedCategory?.name,
+        categoryname: selectedCategory?.name,
         subcategoryname: selectedSubCategory?.name,
         isOfferProduct: isOfferProduct,
         isNewArrival: isNewArrival,

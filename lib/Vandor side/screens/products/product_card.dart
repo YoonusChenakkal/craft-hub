@@ -1,5 +1,5 @@
 import 'package:crafti_hub/Vandor%20side/screens/products/product_Provider.dart';
-import 'package:crafti_hub/Vandor%20side/screens/products/product_model.dart';
+import 'package:crafti_hub/user%20side/screens/products/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

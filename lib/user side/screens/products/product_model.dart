@@ -17,6 +17,8 @@ class ProductModel {
   final bool newArrival;
   final bool trendingOne;
   final List<ProductImage> imageUrls;
+  final List<Review> reviews;
+
   final DateTime createdAt;
 
   ProductModel({
@@ -37,6 +39,7 @@ class ProductModel {
     required this.newArrival,
     required this.trendingOne,
     required this.imageUrls,
+    required this.reviews,
     required this.createdAt,
   });
 
@@ -63,6 +66,9 @@ class ProductModel {
       trendingOne: json['trending_one'] ?? false,
       imageUrls: (json['image_urls'] as List)
           .map((img) => ProductImage.fromJson(img))
+          .toList(),
+      reviews: (json['reviews'] as List)
+          .map((review) => Review.fromJson(review))
           .toList(),
       createdAt: DateTime.parse(json['created_at']),
     );
@@ -121,5 +127,34 @@ class ProductImage {
       'product': product,
       'product_image': productImage,
     };
+  }
+}
+
+class Review {
+  final int id;
+  final String user;
+  final int product;
+  final double rating;
+  final String? review;
+  final DateTime createdAt;
+
+  Review({
+    required this.id,
+    required this.user,
+    required this.product,
+    required this.rating,
+    this.review,
+    required this.createdAt,
+  });
+
+  factory Review.fromJson(Map<String, dynamic> json) {
+    return Review(
+      id: json['id'],
+      user: json['user'],
+      product: json['product'],
+      rating: double.parse(json['rating']),
+      review: json['review'],
+      createdAt: DateTime.parse(json['created_at']),
+    );
   }
 }

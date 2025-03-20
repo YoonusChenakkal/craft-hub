@@ -2,6 +2,7 @@ import 'package:crafti_hub/local_storage.dart';
 import 'package:crafti_hub/user%20side/screens/orders/order_model.dart';
 import 'package:crafti_hub/user%20side/screens/orders/order_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 
 class OrderProvider extends ChangeNotifier {
   List<Order> orders = [];
@@ -17,6 +18,8 @@ class OrderProvider extends ChangeNotifier {
   final OrderRepository _orderRepository = OrderRepository();
 
   Future fetchOrders() async {
+    SVProgressHUD.show();
+
     isLoading = true;
     notifyListeners(); // Notify UI that loading has started
 
@@ -34,6 +37,8 @@ class OrderProvider extends ChangeNotifier {
     } catch (e) {
       print('Error fetching orders: $e');
     } finally {
+      SVProgressHUD.dismiss();
+
       isLoading = false;
     }
   }

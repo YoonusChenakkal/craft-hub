@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:crafti_hub/user%20side/common/add_to_cart_sheet.dart';
 import 'package:crafti_hub/user%20side/common/custom_app_bar.dart';
+import 'package:crafti_hub/user%20side/common/flush_bar.dart';
 import 'package:crafti_hub/user%20side/screens/home/home_provider.dart';
 import 'package:crafti_hub/user%20side/screens/products/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -13,7 +17,8 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-  String _reviewText = '';
+  bool _showAllReviews = false;
+  TextEditingController reviewController = TextEditingController();
   int _rating = 0;
 
   @override
@@ -108,13 +113,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               ),
                             ),
                             const SizedBox(width: 8),
-                            Text(
-                              '/ ',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
                           ],
                         ),
                         // Savings and Discount
@@ -181,11 +179,99 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         const Divider(),
                         const SizedBox(height: 8),
                         // Reviews List
-                        if (product.imageUrls == null &&
-                            product.imageUrls.isEmpty)
-                          ...product.imageUrls!
-                              .map((review) => ReviewItem(review: review))
-                              .toList()
+                        // Add a state variable to track whether to show all reviews
+
+// Inside the build method, update the reviews section
+                        if (product.reviews != null &&
+                            product.reviews.isNotEmpty)
+                          Column(
+                            children: [
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: _showAllReviews
+                                    ? product.reviews.length
+                                    : min(3, product.reviews.length),
+                                itemBuilder: (context, index) {
+                                  final review = product.reviews[index];
+                                  return Card(
+                                    color: const Color.fromARGB(
+                                        255, 250, 250, 250),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    elevation: 2,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                review.user,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              const Spacer(),
+                                              ...List.generate(
+                                                5,
+                                                (starIndex) => Icon(
+                                                  starIndex <
+                                                          review.rating.toInt()
+                                                      ? Icons.star_rounded
+                                                      : Icons
+                                                          .star_outline_rounded,
+                                                  color: Colors.amber,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            review.review ?? 'No review ',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey.shade700,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            DateFormat.yMd()
+                                                .format(review.createdAt),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey.shade500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              if (product.reviews.length >
+                                  3) // Show "View All" button only if there are more than 3 reviews
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _showAllReviews =
+                                          !_showAllReviews; // Toggle between showing all and showing 3
+                                    });
+                                  },
+                                  child: Text(
+                                    _showAllReviews ? 'Show Less' : 'View All',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )
                         else
                           const Padding(
                             padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -227,72 +313,77 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         const SizedBox(height: 12),
                         // Review Text Field
                         TextField(
+                          controller: reviewController,
                           decoration: const InputDecoration(
                             hintText:
                                 'Share your thoughts about the product...',
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.yellow),
+                            ),
                             filled: true,
                             fillColor: Colors.white,
                           ),
                           maxLines: 4,
-                          onChanged: (value) =>
-                              setState(() => _reviewText = value),
                         ),
                         const SizedBox(height: 16),
                         // Submit Button
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton.icon(
-                            icon: const Icon(Icons.send_rounded, size: 20),
-                            label: const Text(
-                              'SUBMIT REVIEW',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.brown,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              icon: const Icon(Icons.send_rounded,
+                                  color: Colors.white, size: 20),
+                              label: const Text(
+                                'SUBMIT REVIEW',
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                            ),
-                            onPressed: () async {
-                              if (_rating == 0) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                            Text('Please select a rating')));
-                                return;
-                              }
-                              if (_reviewText.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                            Text('Please write a review')));
-                                return;
-                              }
-                              try {
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.yellow.shade600,
+                                foregroundColor: Colors.white,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              onPressed: () async {
+                                if (_rating == 0) {
+                                  showFlushbar(
+                                      context: context,
+                                      color: Colors.red,
+                                      icon: Icons.error,
+                                      message: 'Please select a rating');
+
+                                  return;
+                                }
+                                if (reviewController.text.isEmpty) {
+                                  showFlushbar(
+                                      context: context,
+                                      color: Colors.red,
+                                      icon: Icons.error,
+                                      message: 'Please write a review');
+
+                                  return;
+                                }
                                 final homeProvider = Provider.of<HomeProvider>(
                                     context,
                                     listen: false);
-                                await homeProvider.addReviewToProduct(
-                                    context, product.id, _reviewText, _rating);
+                                await homeProvider.addReviewToProduct(context,
+                                    product.id, reviewController.text, _rating);
                                 // Clear form
                                 setState(() {
-                                  _reviewText = '';
+                                  reviewController.text = '';
                                   _rating = 0;
                                 });
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            'Review submitted successfully!')));
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            'Failed to submit review: $e')));
-                              }
-                            },
+                              },
+                            ),
                           ),
                         ),
                       ],
@@ -354,65 +445,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       context: context,
       isScrollControlled: true,
       builder: (_) => AddToCartSheet(product: product),
-    );
-  }
-}
-
-class ReviewItem extends StatelessWidget {
-  final review;
-
-  const ReviewItem({super.key, required this.review});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  review.userName,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                const Spacer(),
-                ...List.generate(
-                    5,
-                    (index) => Icon(
-                          index < review.rating
-                              ? Icons.star_rounded
-                              : Icons.star_outline_rounded,
-                          color: Colors.amber,
-                          size: 20,
-                        )),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              review.comment,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey.shade700,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              review.date,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey.shade500,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

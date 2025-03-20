@@ -4,6 +4,7 @@ import 'package:crafti_hub/user%20side/screens/cart/cart_model.dart';
 import 'package:crafti_hub/user%20side/screens/cart/repository/cart_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 
 class CartProvider extends ChangeNotifier {
   List<CartItem> cartItems = [];
@@ -27,7 +28,7 @@ class CartProvider extends ChangeNotifier {
   }
 
   Future<void> fetchCart() async {
-    isLoading = true;
+    SVProgressHUD.show();
     notifyListeners(); // Notify UI that loading has started
 
     try {
@@ -64,13 +65,12 @@ class CartProvider extends ChangeNotifier {
       }
       rethrow;
     } finally {
-      isLoading = false;
-      notifyListeners(); // Notify UI that loading has stopped
+      SVProgressHUD.dismiss();
     }
   }
 
   Future addToCart(Map<String, dynamic> body, int productId, context) async {
-    isLoading = true;
+    SVProgressHUD.show();
     try {
       final userId = await LocalStorage.getUser();
 
@@ -92,12 +92,14 @@ class CartProvider extends ChangeNotifier {
           color: Colors.red,
           context: context);
     } finally {
-      isLoading = false;
+      SVProgressHUD.dismiss();
     }
   }
 
   Future deleteCart(int cartItemId, BuildContext context) async {
     try {
+      SVProgressHUD.show();
+
       await _cartRepository.deleteCartItem(cartItemId);
       fetchCart();
       notifyListeners();
@@ -110,13 +112,15 @@ class CartProvider extends ChangeNotifier {
       if (kDebugMode) {
         print('Remove from cart error: $e');
       }
+    } finally {
+      SVProgressHUD.dismiss();
     }
   }
 
   // checkOut
   Future checkOut(BuildContext context, body) async {
     try {
-      isLoading = true;
+      SVProgressHUD.show();
       await _cartRepository.checkOut(body);
       fetchCart();
       notifyListeners();
@@ -135,7 +139,7 @@ class CartProvider extends ChangeNotifier {
           color: Colors.red,
           context: context);
     } finally {
-      isLoading = false;
+      SVProgressHUD.dismiss();
     }
   }
 }

@@ -105,12 +105,11 @@ class VendorProfilePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 1.5.h),
-              ratingSection(),
               // Enable/Disable Switch
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.edit, color: Colors.brown),
                     TextButton(

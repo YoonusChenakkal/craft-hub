@@ -1,9 +1,20 @@
+import 'dart:math';
+
 import 'package:crafti_hub/Vandor%20side/common/button.dart';
 import 'package:crafti_hub/Vandor%20side/common/custom_app_bar.dart';
-import 'package:crafti_hub/Vandor%20side/screens/products/product_model.dart';
+import 'package:crafti_hub/user%20side/screens/products/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class VendorProductDetailPage extends StatelessWidget {
+class VendorProductDetailPage extends StatefulWidget {
+  @override
+  State<VendorProductDetailPage> createState() =>
+      _VendorProductDetailPageState();
+}
+
+class _VendorProductDetailPageState extends State<VendorProductDetailPage> {
+  bool _showAllReviews = false;
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments;
@@ -160,6 +171,119 @@ class VendorProductDetailPage extends StatelessWidget {
                             color: Colors.grey.shade600,
                           ),
                         ),
+                        const SizedBox(height: 24),
+                        const Text(
+                          'Customer Reviews',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const Divider(),
+                        const SizedBox(height: 8),
+                        // Reviews List
+                        // Add a state variable to track whether to show all reviews
+
+// Inside the build method, update the reviews section
+                        if (product.reviews != null &&
+                            product.reviews.isNotEmpty)
+                          Column(
+                            children: [
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: _showAllReviews
+                                    ? product.reviews.length
+                                    : min(3, product.reviews.length),
+                                itemBuilder: (context, index) {
+                                  final review = product.reviews[index];
+                                  return Card(
+                                    color: const Color.fromARGB(
+                                        255, 250, 250, 250),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    elevation: 2,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                review.user,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              const Spacer(),
+                                              ...List.generate(
+                                                5,
+                                                (starIndex) => Icon(
+                                                  starIndex <
+                                                          review.rating.toInt()
+                                                      ? Icons.star_rounded
+                                                      : Icons
+                                                          .star_outline_rounded,
+                                                  color: Colors.amber,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            review.review ?? 'No review ',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey.shade700,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            DateFormat.yMd()
+                                                .format(review.createdAt),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey.shade500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              if (product.reviews.length >
+                                  3) // Show "View All" button only if there are more than 3 reviews
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _showAllReviews =
+                                          !_showAllReviews; // Toggle between showing all and showing 3
+                                    });
+                                  },
+                                  child: Text(
+                                    _showAllReviews ? 'Show Less' : 'View All',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )
+                        else
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            child: Text(
+                              'No reviews yet. Be the first to review!',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
                       ],
                     ),
                   ),

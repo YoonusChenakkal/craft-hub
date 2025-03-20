@@ -171,33 +171,34 @@ class HomeRespository {
   }
   // add review to product
 
-  Future addReviewToProduct(productId, review, rating) async {
+  Future addReviewToProduct(int productId, String review, int rating) async {
+    print('workinng 0000000 repo');
     try {
       final userId = await LocalStorage.getUser();
       final data = {
         'user_id': userId,
         'rating': rating,
         'product_id': productId,
+        'product': productId,
         'review': review
       };
+      print(data);
+      final formdData = FormData.fromMap(data);
 
       Response response = await dio.post(
         'https://purpleecommerce.pythonanywhere.com/productsapp/product-reviews/',
-        data: data,
+        data: formdData,
       );
 
       // Success case
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return response;
-      } else {
-        // This block is not needed if using default validateStatus
-        throw Exception('Unexpected status code: ${response.statusCode}');
+        return response.data;
       }
     } on DioException catch (e) {
       // Handle 400 errors and other Dio exceptions
       if (e.response != null) {
         String errorMessage = '';
-        errorMessage = e.response!.data.entries.first.value;
+        errorMessage = e.response!.data;
         print('---------------->${errorMessage}');
 
         throw Exception(

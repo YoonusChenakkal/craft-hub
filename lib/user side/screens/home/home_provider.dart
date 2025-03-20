@@ -4,6 +4,7 @@ import 'package:crafti_hub/user%20side/screens/home/home_respository.dart';
 import 'package:crafti_hub/user%20side/screens/home/product_banner_model.dart';
 import 'package:crafti_hub/user%20side/screens/products/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 
 class HomeProvider extends ChangeNotifier {
   bool _isLoading = false;
@@ -111,6 +112,7 @@ class HomeProvider extends ChangeNotifier {
 
   fetchAllProducts(BuildContext context) async {
     isLoading = true;
+    SVProgressHUD.show();
 
     try {
       final response = await _homeRepo.fetchAllProducts();
@@ -132,6 +134,7 @@ class HomeProvider extends ChangeNotifier {
       print("❌ Fetching All Products failed: $e");
     } finally {
       isLoading = false;
+      SVProgressHUD.dismiss();
     }
   }
 
@@ -191,17 +194,54 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
-  // add review to product
+  // Add review to product
   addReviewToProduct(
-      BuildContext context, int productId, String review, rating) async {
+      BuildContext context, int productId, String review, int rating) async {
     isLoading = true;
+    SVProgressHUD.show();
+    notifyListeners(); // Notify listeners to show loading state
 
     try {
       final response =
           await _homeRepo.addReviewToProduct(productId, review, rating);
 
-      print('Sucess Add Review');
-      notifyListeners();
+      // Parse the response
+      final newReview = Review(
+        id: response['id'],
+        user: response['user_name'], // Use 'user_name' from the response
+        product: response['product'],
+        rating: double.parse(response['rating']),
+        review: response['review'],
+        createdAt: DateTime.parse(response['created_at']),
+      );
+
+      // Find the product in the allProducts list
+      final productIndex =
+          allProducts.indexWhere((product) => product.id == productId);
+
+      if (productIndex != -1) {
+        // Add the new review to the product's reviews list
+        allProducts[productIndex].reviews.add(newReview);
+
+        // Notify listeners to update the UI
+        notifyListeners();
+
+        // Show success message
+        showFlushbar(
+          context: context,
+          color: Colors.green,
+          icon: Icons.check,
+          message: 'Review added successfully!',
+        );
+      } else {
+        // Handle case where the product is not found
+        showFlushbar(
+          context: context,
+          color: Colors.red,
+          icon: Icons.error,
+          message: 'Product not found',
+        );
+      }
     } on Exception catch (e) {
       // Display the parsed error message
       showFlushbar(
@@ -213,6 +253,8 @@ class HomeProvider extends ChangeNotifier {
       print("❌ Adding Review failed: $e");
     } finally {
       isLoading = false;
+      SVProgressHUD.dismiss();
+      notifyListeners(); // Notify listeners to hide loading state
     }
   }
 }
