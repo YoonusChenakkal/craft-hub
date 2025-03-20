@@ -38,7 +38,7 @@ class _BottomBarState extends State<BottomBar> {
       child: Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex,
-          backgroundColor: Colors.brown,
+          backgroundColor: Color.fromARGB(255, 129, 63, 42),
           unselectedItemColor: const Color.fromARGB(255, 255, 220, 186),
           selectedItemColor: Colors.white,
           onTap: _onItemTapped,
