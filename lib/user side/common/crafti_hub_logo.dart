@@ -3,7 +3,7 @@ import 'package:sizer/sizer.dart';
 
 craftiHubLogo() {
   return CircleAvatar(
-    backgroundColor: Colors.brown,
+    backgroundColor: Color.fromARGB(255, 129, 63, 42),
     radius: 16.w,
     child: FittedBox(
       child: Text(

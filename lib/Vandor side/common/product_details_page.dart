@@ -300,7 +300,7 @@ class _VendorProductDetailPageState extends State<VendorProductDetailPage> {
                         arguments: product);
                   },
                   buttonName: 'Edit Product',
-                  color: Colors.brown))
+                  color: Color.fromARGB(255, 129, 63, 42),))
         ],
       ),
     );

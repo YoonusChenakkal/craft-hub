@@ -106,7 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   }
                 },
                 buttonName: 'Register',
-                color: Colors.brown,
+                color: Color.fromARGB(255, 129, 63, 42),
               ),
               space,
               Row(
@@ -120,7 +120,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     },
                     child: Text(
                       'Login',
-                      style: TextStyle(color: Colors.brown),
+                      style: TextStyle(color: Color.fromARGB(255, 129, 63, 42),),
                     ),
                   ),
                 ],
