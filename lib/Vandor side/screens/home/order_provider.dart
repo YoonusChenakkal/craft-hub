@@ -2,6 +2,7 @@ import 'package:crafti_hub/Vandor%20side/screens/home/order_model.dart';
 import 'package:crafti_hub/Vandor%20side/screens/home/order_repository.dart';
 import 'package:crafti_hub/local_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 
 class VendorOrderProvider extends ChangeNotifier {
   List<Order> orders = [];
@@ -19,7 +20,7 @@ class VendorOrderProvider extends ChangeNotifier {
 
   final OrderRepository _orderRepository = OrderRepository();
 
-  Future fetchOrders() async {
+  Future fetchOrders() async {    SVProgressHUD.show();
     isLoading = true;
     notifyListeners(); // Notify UI that loading has started
 
@@ -41,7 +42,7 @@ class VendorOrderProvider extends ChangeNotifier {
     }
   }
 
-  Future changeOrderStatus(orderId, data) async {
+  Future changeOrderStatus(orderId, data) async {SVProgressHUD.show();
     isLoading = true;
     notifyListeners(); // Notify UI that loading has started
 
@@ -56,6 +57,7 @@ class VendorOrderProvider extends ChangeNotifier {
       print('Error changeOrderStatus : $e');
     } finally {
       isLoading = false;
+      SVProgressHUD.dismiss();
     }
   }
 }
